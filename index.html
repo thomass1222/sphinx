@@ -6,6 +6,11 @@
 <title>СФИНКС: БИТВА ЗА КРЫЛЬЯ 🍗</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍗</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@700;900&display=swap" rel="stylesheet">
+
+<!-- FIREBASE SDK ДЛЯ ОНЛАЙН-ЛИДЕРБОРДА -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <style>
 :root {
   --red: #ff1744;
@@ -175,7 +180,6 @@ main {
 }
 .papa-link:hover { transform: scale(1.03); box-shadow: 6px 6px 0px #000; }
 
-/* 4 ПЛАШКИ СТАТОВ */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -192,7 +196,6 @@ main {
 .stat-name { font-size: 9px; color: #888; margin-bottom: 6px; font-family: 'Press Start 2P', monospace; }
 .stat-val { font-size: 16px; font-weight: 900; color: #fff; }
 
-/* БЛОК ГОЛОДА */
 .stat-box.hunger {
   background: radial-gradient(circle, rgba(255,23,68,0.3) 0%, rgba(20,10,15,0.95) 100%);
   border: 3px solid var(--red);
@@ -213,7 +216,6 @@ main {
   background: var(--red); color: #fff; padding: 4px 8px; border-radius: 6px; margin-top: 6px;
 }
 
-/* ИГРОВОЙ БЛОК */
 #game-section {
   width: 100%; max-width: 500px; display: none; flex-direction: column; align-items: center;
   animation: slideDown 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2);
@@ -266,7 +268,6 @@ canvas.trip {
 }
 .t-btn:active { background: rgba(255,23,68,0.6); transform: translateY(2px); }
 
-/* КАРТОЧКА РАЗРАБОТЧИКА */
 .dev-card {
   width: 100%; max-width: 640px;
   background: linear-gradient(135deg, rgba(20, 20, 32, 0.96), rgba(30, 20, 35, 0.96));
@@ -365,7 +366,6 @@ canvas.trip {
       <div class="mc-splash" id="mc-splash">Ни одно крыло не пострадало!</div>
     </div>
 
-    <!-- ФОТО ДАНИЛЫ: ВМЕЩАЕТСЯ ПОЛНОСТЬЮ -->
     <div class="hero-banner" id="hero-tap">
       <img src="fon.png" alt="Сфинкс">
     </div>
@@ -436,9 +436,12 @@ canvas.trip {
     </a>
   </div>
 
+  <!-- ОНЛАЙН ТАБЛИЦА ЛИДЕРОВ -->
   <div class="leaderboard-card">
-    <h2 style="font-family:'Press Start 2P';font-size:14px;color:var(--gold);margin-bottom:16px;">🏆 ДОСКА ПОЧЁТА ПАПКИ</h2>
-    <ul class="lead-list" id="lead-container"></ul>
+    <h2 style="font-family:'Press Start 2P';font-size:14px;color:var(--gold);margin-bottom:16px;">🏆 ДОСКА ПОЧЁТА ПАПКИ (ОНЛАЙН)</h2>
+    <ul class="lead-list" id="lead-container">
+      <li class="lead-item"><span>Загрузка рекордов...</span></li>
+    </ul>
   </div>
 
   <div class="achievements-card">
@@ -448,7 +451,7 @@ canvas.trip {
 </main>
 
 <script>
-/* ================= 1. ФОНОВАЯ МУЗЫКА (SHUFFLE / RANDOM ОТ 1 ДО 7) ================= */
+/* ================= 1. ФОНОВАЯ МУЗЫКА (SHUFFLE sound1-sound7) ================= */
 const BG_TRACKS = [
   "music/sound1.mp3", "music/sound2.mp3", "music/sound3.mp3",
   "music/sound4.mp3", "music/sound5.mp3", "music/sound6.mp3", "music/sound7.mp3"
@@ -542,8 +545,7 @@ document.getElementById('g-save-nick').onclick = () => {
   localStorage.setItem('sphynx_nick', currentNick);
   gateModal.classList.add('hide');
   if (audioCtx.state === 'suspended') audioCtx.resume();
-  playRandomBgMusic(); // Случайный трек при первом клике
-  updateLeaderboardUI();
+  playRandomBgMusic();
 };
 
 document.getElementById('btn-show-rules').onclick = () => {
@@ -625,30 +627,52 @@ function renderAchievements() {
 }
 renderAchievements();
 
-/* ================= 6. ЛИДЕРБОРД ================= */
-let leaderboard = JSON.parse(localStorage.getItem('sph_leads') || JSON.stringify([
-  { name: 'Данила (Сфинкс)', score: 1450 }, { name: 'Кай Энжел', score: 920 }, { name: 'Первокурсница_04', score: 670 }
-]));
+/* ================= 6. ОНЛАЙН-ЛИДЕРБОРД (FIREBASE REALTIME DB) ================= */
+const firebaseConfig = {
+  databaseURL: "https://sphynx-game-default-rtdb.firebaseio.com"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const leaderboardsRef = db.ref('leaderboard');
 
-function saveRecord(score) {
-  const idx = leaderboard.findIndex(x => x.name === currentNick);
-  if (idx !== -1) { if (score > leaderboard[idx].score) leaderboard[idx].score = score; }
-  else { leaderboard.push({ name: currentNick, score }); }
-  leaderboard.sort((a,b) => b.score - a.score);
-  leaderboard = leaderboard.slice(0, 7);
-  localStorage.setItem('sph_leads', JSON.stringify(leaderboard));
-  updateLeaderboardUI();
+function saveRecord(newScore) {
+  if (!currentNick || newScore <= 0) return;
+  const safeKey = encodeURIComponent(currentNick).replace(/\./g, '_');
+  const userRef = db.ref('leaderboard/' + safeKey);
+  userRef.once('value').then(snap => {
+    const data = snap.val();
+    if (!data || newScore > data.score) {
+      userRef.set({
+        name: currentNick,
+        score: newScore,
+        time: Date.now()
+      });
+    }
+  });
 }
 
-function updateLeaderboardUI() {
-  document.getElementById('lead-container').innerHTML = leaderboard.map((x, i) => `
+// Слушатель базы в реальном времени
+leaderboardsRef.on('value', snapshot => {
+  const data = snapshot.val();
+  const list = [];
+  if (data) {
+    Object.keys(data).forEach(k => list.push(data[k]));
+  }
+  list.sort((a, b) => b.score - a.score);
+  const topList = list.slice(0, 7);
+
+  const container = document.getElementById('lead-container');
+  if (topList.length === 0) {
+    container.innerHTML = `<li class="lead-item"><span>Пока нет рекордов. Стань первым!</span></li>`;
+    return;
+  }
+  container.innerHTML = topList.map((x, i) => `
     <li class="lead-item ${i === 0 ? 'top' : ''}">
       <span>#${i+1} ${x.name}</span>
       <span>${x.score} PTS</span>
     </li>
   `).join('');
-}
-updateLeaderboardUI();
+});
 
 /* ================= 7. ДВИЖОК ИГРЫ ================= */
 const canvas = document.getElementById('c');
@@ -862,7 +886,6 @@ function draw() {
   drops.forEach(d => {
     ctx.font = '28px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(d.meta.e, d.x, d.y);
     
-    // НАДПИСЬ ДЛЯ ПУНША
     if (d.meta.t === 'punch') {
       ctx.font = '8px "Press Start 2P"';
       ctx.fillStyle = '#ffd23f';
@@ -907,7 +930,7 @@ function draw() {
 function endGame(title, desc) {
   gameOver = true; running = false;
   clearInterval(timerInterval); canvas.classList.remove('trip');
-  saveRecord(score);
+  saveRecord(score); // Запись в Firebase!
   document.getElementById('over-title').textContent = title;
   document.getElementById('over-desc').textContent = desc;
   document.getElementById('final-score').textContent = score;
