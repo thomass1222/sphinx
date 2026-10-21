@@ -371,7 +371,6 @@ canvas.trip {
 }
 .overlay p { font-size: 9px; line-height: 1.6; margin-bottom: 12px; color: #ccc; font-family: 'Press Start 2P', monospace; }
 
-/* УПРАВЛЕНИЕ: приподнято над системной полоской */
 .touch-ctl {
   position: absolute; bottom: 20px; left: 10px; right: 10px;
   display: flex; justify-content: space-between; align-items: flex-end; z-index: 15; pointer-events: none;
@@ -540,9 +539,7 @@ canvas.trip {
       <span id="patch-indicator" style="font-family:'Press Start 2P';font-size:9px;color:var(--yellow)">v3.0 (1/4)</span>
       <button class="btn alt" id="btn-patch-next" style="padding:6px 10px">▶</button>
     </div>
-    <div class="patch-content-box" id="patch-body">
-      <!-- Контент патчей генерируется скриптом -->
-    </div>
+    <div class="patch-content-box" id="patch-body"></div>
     <button class="btn gold" id="btn-close-patch" style="width:100%">ЗАКРЫТЬ 🤝</button>
   </div>
 </div>
@@ -559,9 +556,7 @@ canvas.trip {
       <button class="wardrobe-tab-btn" data-rtab="uncommon" style="color:var(--rarity-uncommon)">НЕОБЫЧНЫЕ</button>
       <button class="wardrobe-tab-btn" data-rtab="common" style="color:var(--rarity-common)">ОБЫЧНЫЕ</button>
     </div>
-    <div class="relics-grid" id="relics-container">
-      <!-- Сетка 50 реликвий генерируется скриптом -->
-    </div>
+    <div class="relics-grid" id="relics-container"></div>
     <div id="equipped-info" style="font-size:10px;line-height:1.4;color:var(--yellow);margin-bottom:12px;font-family:'Press Start 2P'">
       ЭКИПИРОВАНО: <span>Ничего</span>
     </div>
@@ -846,7 +841,6 @@ const VOICE = {
   }
 };
 
-// Haptic виброотклик для смартфонов
 function triggerHaptic(type) {
   if (!navigator.vibrate) return;
   try {
@@ -953,7 +947,7 @@ renderPatch();
 
 /* ================= 4. БАЗА 50 РЕЛИКВИЙ (5 УРОВНЕЙ РЕДКОСТИ) ================= */
 const RELICS_DATA = [
-  // 4 ЛЕГЕНДАРНЫХ (ОСОБЫЕ ЭФФЕКТЫ)
+  // 4 ЛЕГЕНДАРНЫХ
   { id: 'reebok_orange', n: 'Оранжевые Reebok', icon: '👟', rarity: 'legendary', desc: '+40% скорости рывка, полный игнор луж и замедлений' },
   { id: 'cottage_tank', n: 'Майка с коттеджа', icon: '🎽', rarity: 'legendary', desc: 'КД Батина Рыка снижен на 50%, бафф очков x1.5' },
   { id: 'glossy_jacket', n: 'Глянцевая куртка', icon: '🧥', rarity: 'legendary', desc: 'Авто-щит: поглощает 1 взрыв бомбы каждые 60 секунд' },
@@ -1316,7 +1310,7 @@ document.querySelectorAll('.lead-tab-btn').forEach(btn => {
 });
 loadLeaderboard('easy');
 
-/* ================= 9. БАЗА ДИЛЕММ (ЧАСТЬ 1: СИТУАЦИИ 1 - 50) ================= */
+/* ================= 9. БАЗА ДИЛЕММ (ЧАСТЬ 1: 1 - 50) ================= */
 const DILEMMAS = [
   // 1-10: ЛОРНЫЕ СОБЫТИЯ И ДРУЗЬЯ
   { t: "ГРЯЗНУЛЬКИ В ПОДДОНЕ", q: "В общажном душе обнаружен подозрительный налёт.", b1: "ДАТЬ КЛЫКА (-20 КГ)", b2: "ЗАИНЦЕЛИТЬ (БЕЗ ИЗМЕНЕНИЙ)", a1: () => { weight = Math.max(0, weight - 20); }, a2: () => {} },
@@ -1376,8 +1370,7 @@ const DILEMMAS = [
   { t: "СЛОМАННЫЙ ДИВАН В КОТТЕДЖЕ", q: "Хозяин дома требует 15.000₽ за сломанную ножку.", b1: "ПРИМЕНИТЬ АВТОРИТЕТ ПАПКИ", b2: "СВАЛИТЬ ЧЕРЕЗ ЗАБОР (-20 КГ)", a1: () => { score += 150; activateRoar(); }, a2: () => { weight = Math.max(0, weight - 20); } },
   { t: "КАЛЬЯН В БЕСЕДКЕ", q: "Тяга тяжелая, вкус «двойное яблоко».", b1: "ПРОДУТЬ КАЛЬЯН (SLOW-MO)", b2: "ОТКАЗАТЬСЯ ОТ ДЫМА (+30 PTS)", a1: () => { slowMoTimer = 350; }, a2: () => { score += 30; } },
   { t: "КТО-ТО ВЫЗВАЛ МЕНТОВ", q: "Соседи по даче пожаловались на бас в 04:00.", b1: "ВЫЙТИ НА ПЕРЕГОВОРЫ", b2: "ВЫКЛЮЧИТЬ СВЕТ И ЗАТАИТЬСЯ", a1: () => { score += 120; shieldTimer = 300; }, a2: () => { slowMoTimer = 250; } },
-  { t: "ФИНАЛЬНЫЙ СЧЁТ ЗА КОТТЕДЖ", q: "Собрали посуду, мусор в мешки.", b1: "УБРАТЬ ВСЁ ЗА 10 МИНУТ (+80 PTS)", b2: "ОСТАВИТЬ ЗАЛОГ И УЕХАТЬ", a1: () => { score += 80; comboMultiplier = 5; }, a2: () => { score += 40; } }
-];
+  { t: "ФИНАЛЬНЫЙ СЧЁТ ЗА КОТТЕДЖ", q: "Собрали посуду, мусор в мешки.", b1: "УБРАТЬ ВСЁ ЗА 10 МИНУТ (+80 PTS)", b2: "ОСТАВИТЬ ЗАЛОГ И УЕХАТЬ", a1: () => { score += 80; comboMultiplier = 5; }, a2: () => { score += 40; } },
   // 51-60: KAI ANGEL, 9MICE И VIP-ЖИЗНЬ
   { t: "ТРЕК KAI ANGEL В НАУШНИКАХ", q: "Бит дропает на 140 BPM прямо на паре.", b1: "КАЧАТЬ ГОЛОВОЙ (СКОРОСТЬ x1.4)", b2: "СДЕЛАТЬ ПОТИШЕ (БАЛАНС)", a1: () => { speedMultiplier *= 1.4; score += 70; }, a2: () => { weight = 100; } },
   { t: "ФИТ 9MICE & KAI ANGEL", q: "Свежий сниппет взорвал кружки в Telegram.", b1: "РЕПОСТНУТЬ В СТОРИС (+90 PTS)", b2: "НАПИСАТЬ: «РАНЬШЕ БЫЛО ЛУЧШЕ»", a1: () => { score += 90; }, a2: () => { rageTimer = 200; } },
@@ -1558,7 +1551,6 @@ const roarTxt = document.getElementById('roar-txt');
 function activateRoar() {
   if (roarCooldown > 0 || !running || gameOver) return;
   
-  // Бафф реликвии: майка с коттеджа режет КД в 2 раза
   const relic = getEquippedRelic();
   let baseCooldown = ROAR_MAX_COOLDOWN;
   if (relic.id === 'cottage_tank') baseCooldown = 10;
@@ -1621,7 +1613,6 @@ function addSparkle(x, y, color) {
   particles.push({ x, y, vx: (Math.random()-0.5)*4, vy: (Math.random()-0.5)*4, life: 18, color: color || '#ffd23f' });
 }
 
-// Пассивный таймер глянцевой куртки
 let glossyCooldown = 0;
 
 function update() {
@@ -1638,10 +1629,9 @@ function update() {
 
   const relic = getEquippedRelic();
 
-  // Реликвия: Глянцевая куртка дает пассивный щит раз в 60 сек
   if (relic.id === 'glossy_jacket') {
     glossyCooldown++;
-    if (glossyCooldown >= 3600) { // 60 секунд при 60 fps
+    if (glossyCooldown >= 3600) {
       glossyCooldown = 0;
       shieldTimer = Math.max(shieldTimer, 180);
       SFX.shield();
@@ -1676,7 +1666,6 @@ function update() {
     if (Math.random() < 0.08) screenShake = 4;
   }
 
-  // Реликвии на скорость
   if (relic.id === 'reebok_orange') targetSpeed *= 1.4;
   if (relic.id === 'energy_drink') targetSpeed *= 1.15;
 
@@ -1727,7 +1716,6 @@ function update() {
     if (p.life <= 0) particles.splice(i, 1);
   }
 
-  // Реликвия: Карго штаны не пускают вес выше 180 кг
   if (relic.id === 'cargo_pants' && weight > 180) {
     weight = 180;
   }
@@ -1841,7 +1829,6 @@ function handleCatch(meta) {
   }
 }
 
-/* ================= 11. АНИМИРОВАННЫЕ КОНЦОВКИ НА CANVAS ================= */
 function startCutscene(type) {
   cutsceneType = type;
   cutsceneTimer = 0;
@@ -2024,7 +2011,6 @@ function resetGame() {
   const cfg = DIFFICULTY_CONFIG[selectedDifficulty];
   const relic = getEquippedRelic();
   
-  // Реликвия: Шампур от Сурена запускает ярость со старта
   if (relic.id === 'shashlik_skewer') {
     rageTimer = 480;
     showTitlePop('ШАШЛЫЧНЫЙ БЕРСЕРК! 🍢');
