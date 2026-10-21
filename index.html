@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>ИГРА ПАПКИ beta 1.4.1 🍗</title>
+<title>ИГРА ПАПКИ beta 1.6 🍗</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍗</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@700;900&display=swap" rel="stylesheet">
 
@@ -44,7 +44,7 @@ body {
   transition: background 0.5s ease;
 }
 
-/* ЭКРАН ЗАГРУЗКИ (BOOTLOADER) */
+/* БУТЛОАДЕР */
 #boot-screen {
   position: fixed; inset: 0; z-index: 999999;
   background: #050508; display: flex; flex-direction: column;
@@ -206,7 +206,7 @@ main {
   text-shadow: 0 0 15px #ff1744, 2px 2px 0px #000;
 }
 
-/* ПОЛНОЭКРАННЫЙ ЭКРАН ИГРЫ */
+/* ЭКРАН ИГРЫ */
 #game-section {
   position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh;
   z-index: 99998; background: rgba(5,5,10,0.96); backdrop-filter: blur(14px);
@@ -257,29 +257,36 @@ canvas.trip {
   border-bottom: 2px solid var(--red); z-index: 12; display: none;
 }
 
-/* ВСПЛЫВАЮЩИЙ ТИТУЛ */
 #title-pop {
   position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%) scale(0);
-  font-family: 'Press Start 2P'; font-size: 13px; color: var(--yellow);
+  font-family: 'Press Start 2P'; font-size: 12px; color: var(--yellow);
   text-shadow: 3px 3px 0 var(--red), 0 0 20px #000; text-align: center;
   pointer-events: none; z-index: 50; transition: transform 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
   white-space: nowrap;
 }
 #title-pop.show { transform: translate(-50%, -50%) scale(1.2); }
 
-/* ДИАЛОГОВОЕ ОКНО ВЫБОРА (КАТ-СЦЕНА) */
+/* ДИЛЕММА С ПРИВЯЗКОЙ К IMG_7247.jpeg */
 #dilemma-screen {
-  position: absolute; inset: 0; background: rgba(5,5,8,0.95);
+  position: absolute; inset: 0; background: rgba(5,5,8,0.96);
   display: none; flex-direction: column; align-items: center; justify-content: center;
-  z-index: 60; padding: 22px; text-align: center;
+  z-index: 60; padding: 18px; text-align: center;
 }
-#dilemma-screen h3 {
-  font-family: 'Press Start 2P'; font-size: 11px; color: var(--gold); margin-bottom: 14px;
+.dilemma-banner-box {
+  width: 100%; max-width: 380px; height: 140px; border-radius: 12px;
+  border: 3px solid var(--gold); overflow: hidden; margin-bottom: 12px;
+  box-shadow: 0 0 20px rgba(255,183,3,0.4); background: #000;
+}
+.dilemma-banner-box img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+#dilemma-title {
+  font-family: 'Press Start 2P'; font-size: 11px; color: var(--gold); margin-bottom: 10px;
 }
 #dilemma-desc {
-  font-size: 12px; line-height: 1.6; color: #fff; margin-bottom: 20px;
+  font-size: 12px; line-height: 1.6; color: #fff; margin-bottom: 16px; max-width: 380px;
 }
-.dilemma-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; }
+.dilemma-btns { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 360px; }
 
 .overlay {
   position: absolute; inset: 0; background: rgba(5,5,8,0.94);
@@ -292,7 +299,6 @@ canvas.trip {
 }
 .overlay p { font-size: 10px; line-height: 1.8; margin-bottom: 14px; color: #ccc; font-family: 'Press Start 2P', monospace; }
 
-/* КНОПКИ ДВИЖЕНИЯ И БАТИН РЫК */
 .touch-ctl {
   position: absolute; bottom: 12px; left: 12px; right: 12px;
   display: flex; justify-content: space-between; align-items: flex-end; z-index: 15; pointer-events: none;
@@ -345,7 +351,6 @@ canvas.trip {
 }
 .ach-item.unlocked { opacity: 1; border-style: solid; border-color: var(--gold); background: #261f0a; color: var(--gold); }
 
-/* ПРЕДПРОСМОТР ДИПЛОМА НА МОБИЛЬНЫХ СМАРТФОНАХ */
 #diploma-preview-overlay {
   position: fixed; inset: 0; z-index: 1000000;
   background: rgba(5,5,8,0.98); backdrop-filter: blur(14px);
@@ -356,9 +361,7 @@ canvas.trip {
   width: 100%; max-width: 460px; height: 100%; max-height: 85vh;
   display: flex; flex-direction: column; align-items: center; gap: 14px;
 }
-#preview-title {
-  font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--gold);
-}
+#preview-title { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--gold); }
 #diploma-img {
   width: 100%; height: auto; max-height: 58dvh; object-fit: contain;
   border: 3px solid #fff; border-radius: 14px; box-shadow: 0 0 25px var(--gold);
@@ -367,9 +370,8 @@ canvas.trip {
 </head>
 <body>
 
-<!-- ЭКРАН ЗАГРУЗКИ (BOOTLOADER) -->
 <div id="boot-screen">
-  <div class="boot-title">ИГРА ПАПКИ<br><span style="font-size:12px;color:var(--red)">BETA 1.4.1</span></div>
+  <div class="boot-title">ИГРА ПАПКИ<br><span style="font-size:12px;color:var(--red)">BETA 1.6</span></div>
   <div class="boot-bar-box"><div id="boot-bar-fill"></div></div>
   <div id="boot-log">Инициализация биоса общаги...</div>
   <button class="btn gold" id="btn-boot-start" style="display:none">ВОЙТИ В ИГРУ 🍗</button>
@@ -454,7 +456,6 @@ canvas.trip {
   </div>
 </div>
 
-<!-- НОВАЯ МОБИЛЬНАЯ ПРЕДПРОСМОТРОВАЯ МОДАЛКА ДЛЯ ДИПЛОМА -->
 <div id="diploma-preview-overlay">
   <div class="preview-inner">
     <div id="preview-title">🏆 ДИПЛОМ СФИНКСА СФОРМИРОВАН!</div>
@@ -470,7 +471,7 @@ canvas.trip {
 <main>
   <div class="profile-card">
     <div>
-      <span class="beta-badge">🔥 ИГРА ПАПКИ beta 1.4.1 🔥</span>
+      <span class="beta-badge">🔥 ИГРА ПАПКИ beta 1.6 🔥</span>
     </div>
 
     <div class="mc-splash-wrap">
@@ -543,12 +544,15 @@ canvas.trip {
     <div id="event-banner">🔥 СПЕЦ-СОБЫТИЕ: НАЛЕТ НА KFC! 🔥</div>
     <div id="title-pop">ХОЛЕСТЕРИНОВЫЙ БОГ!</div>
 
-    <!-- КАТ-СЦЕНА С ДИЛЕММОЙ -->
+    <!-- ОКНО ДИЛЕММЫ С КАРТИНКОЙ IMG_7247.jpeg -->
     <div id="dilemma-screen">
+      <div class="dilemma-banner-box">
+        <img id="dilemma-img" src="IMG_7247.jpeg" alt="Событие" onerror="this.src='scene_dilemma.png'; this.onerror=null;">
+      </div>
       <h3 id="dilemma-title">СИТУАЦИЯ У РОСТИКСА</h3>
       <p id="dilemma-desc">Зайти взять ведро крыльев по купону?</p>
       <div class="dilemma-btns">
-        <button class="btn gold" id="dil-btn-1">ВЗЯТЬ ВЕДРО (+40 КГ)</button>
+        <button class="btn gold" id="dil-btn-1">ВЗЯТЬ (+40 КГ)</button>
         <button class="btn alt" id="dil-btn-2">ПРОЙТИ МИМО (-10 КГ)</button>
       </div>
     </div>
@@ -592,7 +596,7 @@ canvas.trip {
 </div>
 
 <script>
-/* ================= 1. БУТЛОАДЕР (ПРЕДЗАГРУЗКА) ================= */
+/* ================= 1. БУТЛОАДЕР ================= */
 const bootLogs = [
   "Проверка наличия первокурсниц... найдено 0",
   "Калибровка холестерина... 100%",
@@ -629,7 +633,7 @@ bootBtn.onclick = () => {
   playRandomBgMusic();
 };
 
-/* ================= 2. МУЗЫКА И ГОЛОСОВЫЕ СФИНКСА ================= */
+/* ================= 2. МУЗЫКА И ГОЛОСОВЫЕ ================= */
 const BG_TRACKS = [
   "music/sound1.mp3", "music/sound2.mp3", "music/sound3.mp3",
   "music/sound4.mp3", "music/sound5.mp3", "music/sound6.mp3", "music/sound7.mp3"
@@ -667,24 +671,28 @@ function playSoundFallback(paths, vol=1.0) {
 
 const VOICE = {
   bomb() {
+    bgAudio.volume = 0.02;
     playSoundFallback([
       "music/voice_bomb.mp3.m4a",
       "voice_bomb.mp3.m4a",
       "music/voice_bomb.mp3",
       "voice_bomb.mp3"
     ], 1.0);
+    setTimeout(() => { if (!gameOver) bgAudio.volume = 0.10; }, 2500);
   },
   boss() {
+    bgAudio.volume = 0.02;
     playSoundFallback([
       "music/voice_boss.mp3.m4a",
       "voice_boss.mp3.m4a",
       "music/voice_boss.mp3",
       "voice_boss.mp3"
     ], 1.0);
+    setTimeout(() => { if (!gameOver) bgAudio.volume = 0.10; }, 2500);
   }
 };
 
-/* ================= 3. ВЫБОР НЕОНОВОЙ ПОДСВЕТКИ (9 ЦВЕТОВ) ================= */
+/* ================= 3. ВЫБОР НЕОНА ================= */
 const THEME_COLORS = [
   { name: 'KFC Red', val: '#ff1744' }, { name: 'Gold Sphinx', val: '#ffb703' },
   { name: 'Cyber Purple', val: '#d500f9' }, { name: 'Freshman Pink', val: '#ff4081' },
@@ -709,18 +717,22 @@ function renderThemeDots() {
 }
 applyTheme(currentTheme);
 
-/* ================= 4. MINECRAFT СПЛЕШИ ================= */
+/* ================= 4. СПЛЕШИ ================= */
 const SPLASH_TEXTS = [
   "Ни одно крыло не пострадало!", "Первокурсницы живы!", "Папка лучший!",
   "Хочешь карьерный ростик?", "Пахан медиа", "Повелитель мака",
   "Любитель кфс", "Владелец холестерина", "Отец отцов",
-  "Истребитель девственниц", "14", "Сфинкс", "88"
+  "Истребитель девственниц", "14", "Сфинкс", "88",
+  "Коттедж за городом помнит всё!", "Kai Angel в наушниках на максимум",
+  "9mice одобрил форму Папки", "Маринка снова спрятала таблетки!",
+  "Ева-Ева звонит с незнакомого номера", "Вика-Вика требует объяснений",
+  "Ростикс на Проспекте — святилище", "СГУ сила, политех могила"
 ];
 const splashEl = document.getElementById('mc-splash');
 splashEl.onclick = () => { splashEl.textContent = SPLASH_TEXTS[Math.floor(Math.random() * SPLASH_TEXTS.length)]; };
 splashEl.textContent = SPLASH_TEXTS[0];
 
-/* ================= 5. WEB AUDIO SFX ================= */
+/* ================= 5. WEB AUDIO ================= */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playTone(freq, type, duration, vol=0.1) {
   try {
@@ -744,7 +756,7 @@ const SFX = {
   combo() { playTone(600, 'square', 0.1, 0.15); setTimeout(() => playTone(850, 'square', 0.12, 0.2), 50); }
 };
 
-/* ================= 6. МОДАЛКИ И ФЕЙСКОНТРОЛЬ ================= */
+/* ================= 6. МОДАЛКИ ================= */
 const gateModal = document.getElementById('gate-modal');
 const rulesModal = document.getElementById('rules-modal');
 const lawsModal = document.getElementById('laws-modal');
@@ -857,7 +869,7 @@ function renderAchievements() {
 }
 renderAchievements();
 
-/* ================= 8. FIREBASE LEADERBOARD ================= */
+/* ================= 8. FIREBASE ================= */
 const firebaseConfig = { databaseURL: "https://sphynx-game-default-rtdb.firebaseio.com" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -894,8 +906,9 @@ leaderboardsRef.on('value', snapshot => {
   `).join('');
 });
 
-/* ================= 9. 15 КАТ-СЦЕН С ВЫБОРАМИ ================= */
+/* ================= 9. 50 СУДЬБОНОСНЫХ КАТ-СЦЕН ПАПКИ ================= */
 const DILEMMAS = [
+  // 1-10: РОСТИКС, ФАСТФУД И ОБЩАГА
   { t: "ВХОД В РОСТИКС", q: "Зайти взять ведро крыльев по купону?", b1: "ВЗЯТЬ (+40 КГ, +80 PTS)", b2: "МИМО (-10 КГ)", a1: () => { weight = Math.min(200, weight + 40); score += 80; }, a2: () => { weight = Math.max(0, weight - 10); } },
   { t: "ВАХТЕРША ТЁТЯ ЛЮБА", q: "Время 23:05. Вертушка закрывается!", b1: "ДАТЬ КРЫЛЫШКО (ЩИТ)", b2: "ПРОРВАТЬСЯ (+50 PTS)", a1: () => { shieldTimer = 360; }, a2: () => { score += 50; } },
   { t: "ПЕРВОКУРСНИЦА У КУРИЛКИ", q: "Спрашивает дорогу до 5 корпуса.", b1: "ПРОВОДИТЬ (ТРИП, +60 PTS)", b2: "«Я ЗАНЯТ» (СКОРОСТЬ)", a1: () => { tripTimer = 300; score += 60; }, a2: () => { speedMultiplier *= 1.2; } },
@@ -905,18 +918,70 @@ const DILEMMAS = [
   { t: "ПАРА ПО ВЫШМАТУ", q: "Препод угрожает незачетом за пропуски.", b1: "УСНУТЬ НА ПАРЕ (SLOW-MO)", b2: "В ФУДКОРТ (+25 КГ)", a1: () => { slowMoTimer = 350; }, a2: () => { weight = Math.min(200, weight + 25); } },
   { t: "СТРЕЛОК У ОБЩАГИ", q: "Подозрительный тип просит сигарету.", b1: "УГОСТИТЬ (ЗОЛОТОЙ ЩИТ)", b2: "«ПОСЛЕДНЯЯ» (РЫК ГОТОВ)", a1: () => { shieldTimer = 300; }, a2: () => { roarCooldown = 0; roarBtn.disabled = false; roarTxt.textContent = 'РЫК'; } },
   { t: "НАПОЛЬНЫЕ ВЕСЫ", q: "Пацаны выставили весы посреди этажа.", b1: "ВСТАТЬ ГОРДО (+100 PTS)", b2: "ПНУТЬ ВЕСЫ (ФИКС ВЕСА)", a1: () => { score += 100; }, a2: () => { weight = 100; } },
-  { t: "ЗВОНОК ОТ ЕВЫ-ЕВЫ", q: "Входящий в 02:00 ночи...", b1: "СКИНУТЬ (ОЧИСТКА БОМБ)", b2: "ОТВЕТИТЬ (ТРИП-ЭФФЕКТ)", a1: () => { drops.length = 0; }, a2: () => { tripTimer = 300; } },
   { t: "ШАУРМА НА СЕННОМ", q: "Чесночный соус манит за версту.", b1: "ДВОЙНАЯ С СЫРОМ (+50 КГ)", b2: "ПРОЙТИ МИМО (-20 КГ)", a1: () => { weight = Math.min(200, weight + 50); shieldTimer = 300; }, a2: () => { weight = Math.max(0, weight - 20); } },
-  { t: "ЭНЕРГЕТИК ИЗ КБ", q: "Холодная банка ядрёного пойла.", b1: "ВЫПИТЬ ЗАЛПОМ (СКОРОСТЬ)", b2: "ОСТАВИТЬ (СЕЙВ ОТ БОМБЫ)", a1: () => { speedMultiplier *= 1.3; }, a2: () => { shieldCharge = 100; } },
-  { t: "ПЕЛЬМЕНИ В ЧАЙНИКЕ", q: "На общей кухне варят казенный деликатес.", b1: "ВЛЕТЕТЬ В ДОЛЮ (+30 КГ)", b2: "ОТЧИТАТЬ СТУДЕНТОВ (+70 PTS)", a1: () => { weight = Math.min(200, weight + 30); comboMultiplier = Math.min(5, comboMultiplier + 2); }, a2: () => { score += 70; } },
-  { t: "СТУДЕНЧЕСКИЙ ПАТРУЛЬ", q: "«Молодой человек, ваши документы!»", b1: "ПОКАЗАТЬ СТУДАК", b2: "ХАРИЗМА ПАПКИ (БАСКЕТ)", a1: () => { slowMoTimer = 180; }, a2: () => { score += 60; weight = Math.min(200, weight + 10); } },
-  { t: "ЗОЛОТОЙ БАСКЕТ СУДЬБЫ", q: "Финал искушения на горизонте!", b1: "ПОЖРАТЬ СУДЬБУ (+300 PTS, 190 КГ)", b2: "ДЛЯ ПЕРВОКУРСНИЦ (ЩИТ)", a1: () => { score += 300; weight = 190; }, a2: () => { shieldTimer = 500; } }
+
+  // 11-20: МАРИНКА И ТАБЛЕТКИ
+  { t: "МАРИНКА И АПТЕЧКА", q: "Маринка протягивает горсть подозрительных таблеток.", b1: "ВЫПИТЬ ВСЁ СРАЗУ (БЕРСЕРК)", b2: "«Я ЗА ЧИСТЫЙ РАЗУМ»", a1: () => { rageTimer = 350; weight = 130; }, a2: () => { shieldTimer = 250; } },
+  { t: "МАРИНКА СПРЯТАЛА ТАБЛЕТКИ", q: "Сфинкс ищет блистер по всей комнате.", b1: "ПЕРЕВЕРНУТЬ ДИВАН (+60 PTS)", b2: "ЗАБИТЬ И ПОЕСТЬ (+30 КГ)", a1: () => { score += 60; roarCooldown = 0; roarBtn.disabled = false; }, a2: () => { weight = Math.min(200, weight + 30); } },
+  { t: "РЕЦЕПТ ОТ МАРИНКИ", q: "На бланке написано: «3 ведра стрипсов внутривенно».", b1: "ПРИНЯТЬ КУРС (+45 КГ)", b2: "ВЫБРОСИТЬ БЛАНК (-10 КГ)", a1: () => { weight = Math.min(200, weight + 45); score += 90; }, a2: () => { weight = Math.max(0, weight - 10); } },
+  { t: "МАРИНКА В ТРАНСЕ", q: "Маринка утверждает, что голуби за окном следят за ней.", b1: "ПОДДЕРЖАТЬ ТЕОРИЮ (ТРИП)", b2: "НАКОРМИТЬ ЕЁ КРЫЛЫШКОМ", a1: () => { tripTimer = 300; }, a2: () => { score += 80; shieldTimer = 200; } },
+  { t: "СЕДАТИВЫ МАРИНКИ", q: "Маринка насыпала успокоительное в чай.", b1: "ВЫПИТЬ ЧАЙ (МЕГА SLOW-MO)", b2: "ВЫЛИТЬ В ОКНО (+40 PTS)", a1: () => { slowMoTimer = 450; }, a2: () => { score += 40; } },
+  { t: "ШУМ В ГОЛОВЕ МАРИНКИ", q: "Маринка просит включить белый шум или крик Данилы.", b1: "ВРУБИТЬ РЫК ПАПКИ!", b2: "ВКЛЮЧИТЬ ЛОУФАЙ", a1: () => { activateRoar(); score += 50; }, a2: () => { slowMoTimer = 200; } },
+  { t: "НОЧНОЙ ПОХОД В АПТЕКУ", q: "Маринка тянет на улицу в 03:40 ночи.", b1: "ПОЙТИ В ДЕЖУРКУ (-20 КГ КАРДИО)", b2: "ЗАКАЗАТЬ ДОСТАВКУ ЕДЫ (+35 КГ)", a1: () => { weight = Math.max(0, weight - 20); }, a2: () => { weight = Math.min(200, weight + 35); } },
+  { t: "ПУСТЫЕ БЛИСТЕРЫ", q: "По полу разбросана фольга от таблеток.", b1: "СОБРАТЬ И СДАТЬ В МАКУЛАТУРУ", b2: "ИСКАТЬ ЗАВАЛЯВШУЮСЯ (+50 PTS)", a1: () => { score += 70; }, a2: () => { rageTimer = 200; } },
+  { t: "МАРИНКА ПРЕДЛАГАЕТ ВИТАМИНЫ", q: "Говорит: «Это просто омега-3 для суставов».", b1: "СЪЕСТЬ (+15 КГ, ЩИТ)", b2: "ОТКАЗАТЬСЯ (-5 КГ)", a1: () => { weight = Math.min(200, weight + 15); shieldTimer = 300; }, a2: () => { weight = Math.max(0, weight - 5); } },
+  { t: "ТАЙНИК В ШКАФУ", q: "За стопкой конспектов найден стратегический запас.", b1: "КОНФИСКОВАТЬ В ПОЛЬЗУ ПАПКИ", b2: "ОСТАВИТЬ НА ЧЁРНЫЙ ДЕНЬ", a1: () => { score += 110; roarCooldown = 0; roarBtn.disabled = false; }, a2: () => { shieldCharge = 100; } },
+
+  // 21-30: ЕВА-ЕВА И ВИКА-ВИКА
+  { t: "ЗВОНОК ОТ ЕВЫ-ЕВЫ", q: "Входящий в 02:00 ночи... «Ты меня любил вообще?»", b1: "СКИНУТЬ (ОЧИСТКА БОМБ)", b2: "ОТВЕТИТЬ (ТРИП-ЭФФЕКТ)", a1: () => { drops.length = 0; score += 50; }, a2: () => { tripTimer = 300; } },
+  { t: "ВИКА-ВИКА В СТОРИС", q: "Выложила фото с огромным букетом не от тебя.", b1: "ПОСТАВИТЬ ЛАЙК (ПОФИГИЗМ)", b2: "КУПИТЬ В ОТВЕТ БАСКЕТ (+40 КГ)", a1: () => { shieldTimer = 350; }, a2: () => { weight = Math.min(200, weight + 40); } },
+  { t: "ЕВА-ЕВА ПРИШЛА НА ПАРУ", q: "Села прямо перед Данилой и пахнет духами.", b1: "ПЕРЕСЕСТЬ НА ЗАДНЮЮ ПАРТУ", b2: "СМОТРЕТЬ В ГЛАЗА (ЯРОСТЬ)", a1: () => { slowMoTimer = 250; }, a2: () => { rageTimer = 300; } },
+  { t: "ВИКА-ВИКА ТРЕБУЕТ СЕРЬЁЗНОСТИ", q: "«Данила, когда ты повзрослеешь?!»", b1: "«КОГДА РОСТИКС ЗАКРОЮТ»", b2: "ПОКАЗАТЬ ДИПЛОМ ПАПКИ", a1: () => { score += 90; weight = Math.min(200, weight + 20); }, a2: () => { score += 130; } },
+  { t: "ДВОЙНОЙ УДАР: ЕВА И ВИКА", q: "Они встретились в коридоре и переглянулись.", b1: "ТИХО СВАЛИТЬ В ТУАЛЕТ", b2: "ПРОЙТИ МЕЖДУ НИМИ КАК СИГМА", a1: () => { drops.length = 0; }, a2: () => { score += 150; shieldTimer = 400; } },
+  { t: "ЕВА-ЕВА ПИШЕТ «ПРИЕДЬ»", q: "Адрес на другом конце Энгельса в снегопад.", b1: "ВЫЗВАТЬ ТАКСИ (-30 КГ СТРЕСС)", b2: "ОСТАТЬСЯ НА ДИВАНЕ С ПИЦЦЕЙ", a1: () => { weight = Math.max(0, weight - 30); }, a2: () => { weight = Math.min(200, weight + 40); } },
+  { t: "ГОЛОСОВОЕ ОТ ВИКИ-ВИКИ", q: "Кружок на 58 секунд со слезами и упрёками.", b1: "СЛУШАТЬ НА 2X (СКОРОСТЬ)", b2: "ПЕРЕСЛАТЬ КЕНТАМ (+70 PTS)", a1: () => { speedMultiplier *= 1.3; }, a2: () => { score += 70; } },
+  { t: "ЕВА-ЕВА ЗАБРАЛА ХУДИ", q: "Твоё любимое черное оверсайз-худи теперь у неё.", b1: "ТРЕБОВАТЬ НАЗАД (БОЙ)", b2: "КУПИТЬ НОВОЕ НА РАЗМЕР БОЛЬШЕ", a1: () => { activateRoar(); }, a2: () => { weight = Math.min(200, weight + 25); } },
+  { t: "ВИКА-ВИКА УДАЛИЛА ИЗ ДРУЗЕЙ", q: "Чёрный список во всех соцсетях.", b1: "ОТПРАЗДНОВАТЬ В РОСТИКСЕ", b2: "СОЗДАТЬ ФЕЙК И СЛЕДИТЬ", a1: () => { activeEvent = 'kfc_raid'; eventTimer = 7; }, a2: () => { tripTimer = 250; } },
+  { t: "СЛУЧАЙНЫЙ ЛАЙК В 4 УТРА", q: "Палец соскользнул на архивную фотку Евы-Евы.", b1: "МГНОВЕННО УДАЛИТЬ АККАУНТ", b2: "НАПИСАТЬ: «ЭТО БЫЛ КЕНТ»", a1: () => { slowMoTimer = 300; }, a2: () => { score += 80; } },
+
+  // 31-40: КОТТЕДЖ ЗА ГОРОДОМ
+  { t: "КОТТЕДЖ: АРЕНДА НА СУТКИ", q: "Пацаны скинулись по 2500₽ на дом с баней.", b1: "ВЛЕТЕТЬ В ДОЛЮ (РЕЖИМ ТУСЫ)", b2: "ОСТАТЬСЯ В ОБЩАГЕ (-10 КГ)", a1: () => { score += 100; activeEvent = 'smoke_hour'; eventTimer = 8; }, a2: () => { weight = Math.max(0, weight - 10); } },
+  { t: "БАНЯ В КОТТЕДЖЕ", q: "Температура 110 градусов! Папка заходит первым.", b1: "ПАРИТЬСЯ ДО ПОТЕРИ ПУЛЬСА (-35 КГ)", b2: "СИДЕТЬ В ПРЕДБАННИКЕ С ПИВОМ", a1: () => { weight = Math.max(0, weight - 35); }, a2: () => { weight = Math.min(200, weight + 30); } },
+  { t: "БАССЕЙН С ЛЕДЯНОЙ ВОДОЙ", q: "Кенты орут: «Папка, прыгай бомбочкой!»", b1: "ПРЫГНУТЬ БОМБОЧКОЙ (ВОЛНА)", b2: "ОТКАЗАТЬСЯ (СОХРАНИТЬ ЩИТ)", a1: () => { screenShake = 25; drops.length = 0; score += 90; }, a2: () => { shieldTimer = 300; } },
+  { t: "МУЗЫКА В КОТТЕДЖЕ", q: "Колонка JBL на 1000 Ватт разрывает тишину.", b1: "ВРУБИТЬ KAI ANGEL & 9MICE!", b2: "ВКЛЮЧИТЬ БУМЕРСКИЙ РОК", a1: () => { speedMultiplier *= 1.35; score += 100; }, a2: () => { slowMoTimer = 250; } },
+  { t: "ШАШЛЫК НА УГЛЯХ", q: "Мясо шкворчит, капает жир на угли.", b1: "СЪЕСТЬ ШАМПУР ЗАЛПОМ (+45 КГ)", b2: "ПОДЕЛИТЬСЯ С ДЕВЧОНКАМИ", a1: () => { weight = Math.min(200, weight + 45); }, a2: () => { tripTimer = 200; score += 80; } },
+  { t: "УТРО В КОТТЕДЖЕ", q: "На часах 11:30. Голова гудит, кругом коробки.", b1: "ДОЕСТЬ ВЧЕРАШНЮЮ ПИЦЦУ (+25 КГ)", b2: "ВЫПИТЬ РАССОЛ (ОЧИЩЕНИЕ)", a1: () => { weight = Math.min(200, weight + 25); }, a2: () => { weight = 100; shieldTimer = 250; } },
+  { t: "СЛОМАННЫЙ ДИВАН В КОТТЕДЖЕ", q: "Хозяин дома требует 15.000₽ за сломанную ножку.", b1: "ПРИМЕНИТЬ АВТОРИТЕТ ПАПКИ", b2: "СВАЛИТЬ ЧЕРЕЗ ЗАБОР (-20 КГ)", a1: () => { score += 150; activateRoar(); }, a2: () => { weight = Math.max(0, weight - 20); } },
+  { t: "КАЛЬЯН В БЕСЕДКЕ", q: "Тяга тяжелая, вкус «двойное яблоко».", b1: "ПРОДУТЬ КАЛЬЯН (SLOW-MO)", b2: "ОТКАЗАТЬСЯ ОТ ДЫМА (+30 PTS)", a1: () => { slowMoTimer = 350; }, a2: () => { score += 30; } },
+  { t: "КТО-ТО ВЫЗВАЛ МЕНТОВ", q: "Соседи по даче пожаловались на бас в 04:00.", b1: "ВЫЙТИ НА ПЕРЕГОВОРЫ", b2: "ВЫКЛЮЧИТЬ СВЕТ И ЗАТАИТЬСЯ", a1: () => { score += 120; shieldTimer = 300; }, a2: () => { slowMoTimer = 250; } },
+  { t: "ФИНАЛЬНЫЙ СЧЁТ ЗА КОТТЕДЖ", q: "Собрали посуду, мусор в мешки.", b1: "УБРАТЬ ВСЁ ЗА 10 МИНУТ (+80 PTS)", b2: "ОСТАВИТЬ ЗАЛОГ И УЕХАТЬ", a1: () => { score += 80; comboMultiplier = 5; }, a2: () => { score += 40; } },
+
+  // 41-50: KAI ANGEL, 9MICE, VIP СТАЙЛ И ФИНАЛ
+  { t: "ТРЕК KAI ANGEL В НАУШНИКАХ", q: "Бит дропает на 140 BPM прямо на паре.", b1: "КАЧАТЬ ГОЛОВОЙ (СКОРОСТЬ x1.4)", b2: "СДЕЛАТЬ ПОТИШЕ (БАЛАНС)", a1: () => { speedMultiplier *= 1.4; score += 70; }, a2: () => { weight = 100; } },
+  { t: "ФИТ 9MICE & KAI ANGEL", q: "Свежий сниппет взорвал кружки в Telegram.", b1: "РЕПОСТНУТЬ В СТОРИС (+90 PTS)", b2: "НАПИСАТЬ: «РАНЬШЕ БЫЛО ЛУЧШЕ»", a1: () => { score += 90; }, a2: () => { rageTimer = 200; } },
+  { t: "VIP-ЛОЖА В КЛУБЕ", q: "Охранник не пускает в спортивках.", b1: "СКАЗАТЬ: «Я ОТ СФИНКСА»", b2: "ПОЙТИ В РОСТИКС НАПРОТИВ", a1: () => { score += 140; shieldTimer = 400; }, a2: () => { weight = Math.min(200, weight + 40); } },
+  { t: "ОЧКИ THUG LIFE", q: "На асфальте найдены черные пиксельные очки.", b1: "НАДЕТЬ НА ЛИЦО (СТИЛЬ)", b2: "ПОДАРИТЬ ПЕРВОКУРСНИЦЕ", a1: () => { shieldTimer = 300; score += 50; }, a2: () => { tripTimer = 200; score += 100; } },
+  { t: "ПОЕЗДКА НА СЕННОЙ ЗА ШМОТОМ", q: "Рейд по винтажным секондам за оверсайзом.", b1: "КУПИТЬ ЗИПКУ НА 3 РАЗМЕРА БОЛЬШЕ", b2: "СЭКОНОМИТЬ НА БАСКЕТ КРЫЛЬЕВ", a1: () => { weight = Math.min(200, weight + 20); score += 60; }, a2: () => { weight = Math.min(200, weight + 40); } },
+  { t: "ЭНЕРГЕТИК + КОФЕ В ЧАЙНИКЕ", q: "Студенческий коктейль для выживания на сессии.", b1: "ВЫПИТЬ ЗАЛПОМ (ДИКАЯ СКОРОСТЬ)", b2: "ВЫЛИТЬ В РАКОВИНУ (СЕЙВ ВЕСА)", a1: () => { speedMultiplier *= 1.6; rageTimer = 300; }, a2: () => { weight = 100; } },
+  { t: "ПРЕПОД СПРАШИВАЕТ ЛОГИКУ", q: "Билет номер 14: «В чем смысл движения Сфинкса?»", b1: "ОТВЕТИТЬ: «В КРЫЛЬЯХ И БРАТСТВЕ»", b2: "ПОСТАВИТЬ БАСКЕТ НА СТОЛ", a1: () => { score += 200; }, a2: () => { score += 250; weight = Math.max(0, weight - 20); } },
+  { t: "БАТЯ ЗАХОДИТ В ЧАТ ТГК", q: "Папка записал войс на 2 секунды: «Пошли на хуй!»", b1: "ВЗОРВАТЬ ВСЕ БОМБЫ СРАЗУ!", b2: "ПОСТАВИТЬ ОГНЕННУЮ РЕАКЦИЮ 🔥", a1: () => { drops.length = 0; score += 100; }, a2: () => { comboMultiplier = 5; } },
+  { t: "КУПОН НА 100 КРЫЛЬЕВ", q: "Легендарный золотой билет найден под крышкой стола.", b1: "ОБНАЛИЧИТЬ НЕМЕДЛЕННО (+60 КГ)", b2: "РАЗДАТЬ ПЕРВОКУРСНИЦАМ", a1: () => { weight = Math.min(200, weight + 60); score += 200; }, a2: () => { shieldTimer = 600; score += 300; } },
+  { t: "ЗОЛОТОЙ ТРОН СФИНКСА", q: "В центре общажного холла поставили трон из коробок KFC.", b1: "ВОССЕСТЬ В ВЕЛИЧИИ (ФИНАЛ)", b2: "ПОДЕЛИТЬСЯ С КЕНТАМИ", a1: () => { score += 350; weight = 130; shieldTimer = 500; }, a2: () => { score += 500; comboMultiplier = 5; } }
 ];
 
-let nextDilemmaScore = 80;
+let nextDilemmaTime = 40;
+let isDilemmaActive = false;
+
+function scheduleNextDilemma() {
+  const randomDelay = Math.floor(Math.random() * (120 - 30 + 1)) + 30;
+  nextDilemmaTime = gameSeconds + randomDelay;
+}
+
 function showDilemma() {
+  isDilemmaActive = true;
   running = false;
   VOICE.boss();
+
   const d = DILEMMAS[Math.floor(Math.random() * DILEMMAS.length)];
   document.getElementById('dilemma-title').textContent = d.t;
   document.getElementById('dilemma-desc').textContent = d.q;
@@ -933,10 +998,14 @@ function showDilemma() {
 
 function closeDilemma() {
   document.getElementById('dilemma-screen').style.display = 'none';
+  scheduleNextDilemma();
+  isDilemmaActive = false;
   running = true;
+  bgAudio.volume = 0.10;
+  requestAnimationFrame(gameLoop);
 }
 
-/* ================= 10. ВСПЛЫВАЮЩИЕ ТИТУЛЫ ================= */
+/* ================= 10. ТИТУЛЫ ================= */
 function showTitlePop(txt) {
   const pop = document.getElementById('title-pop');
   pop.textContent = txt;
@@ -1007,7 +1076,6 @@ function setupButton(btnId, keyProp) {
 setupButton('b-left', 'left');
 setupButton('b-right', 'right');
 
-// БАТИН РЫК С ВОЛНОЙ
 const roarBtn = document.getElementById('b-roar');
 const roarTxt = document.getElementById('roar-txt');
 function activateRoar() {
@@ -1053,13 +1121,7 @@ function addSparkle(x, y, color) {
 }
 
 function update() {
-  if (!running || gameOver) return;
-
-  if (score >= nextDilemmaScore) {
-    nextDilemmaScore += 90 + Math.floor(Math.random() * 40);
-    showDilemma();
-    return;
-  }
+  if (!running || gameOver || isDilemmaActive) return;
 
   if (screenShake > 0) screenShake--;
   if (slowMoTimer > 0) slowMoTimer--;
@@ -1271,8 +1333,14 @@ function draw() {
 
   particles.forEach(p => { ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, 4, 4); });
   ctx.restore();
+}
 
-  requestAnimationFrame(() => { update(); draw(); });
+function gameLoop() {
+  if (running && !gameOver && !isDilemmaActive) {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+  }
 }
 
 function endGame(title, desc) {
@@ -1291,7 +1359,9 @@ function resetGame() {
   score = 0; weight = 130; shieldCharge = 0; shieldTimer = 0;
   slowMoTimer = 0; rageTimer = 0; tripTimer = 0; drops.length = 0; particles.length = 0;
   comboCount = 0; comboMultiplier = 1; roarCooldown = 0; roarBtn.disabled = false;
-  roarTxt.textContent = 'РЫК'; activeEvent = null; eventTimer = 0; nextDilemmaScore = 80;
+  roarTxt.textContent = 'РЫК'; activeEvent = null; eventTimer = 0;
+  isDilemmaActive = false; scheduleNextDilemma();
+  document.getElementById('dilemma-screen').style.display = 'none';
   document.getElementById('game-wrap').classList.remove('event-active');
   document.getElementById('event-banner').style.display = 'none';
   player.x = (canvas.width - player.w) / 2; gameSeconds = 0; speedMultiplier = 1.0;
@@ -1300,9 +1370,14 @@ function resetGame() {
 
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
-    if (!running) return;
+    if (!running || isDilemmaActive) return;
     gameSeconds++;
-    
+
+    if (gameSeconds >= nextDilemmaTime) {
+      showDilemma();
+      return;
+    }
+
     if (roarCooldown > 0) {
       roarCooldown--;
       roarTxt.textContent = `${roarCooldown}s`;
@@ -1337,11 +1412,12 @@ function resetGame() {
 
   gameOver = false; running = true;
   document.getElementById('over-screen').style.display = 'none';
+  requestAnimationFrame(gameLoop);
 }
 
 document.getElementById('restart-btn').onclick = resetGame;
 
-/* ================= 12. ПРЕДПРОСМОТР И ОТПРАВКА ДИПЛОМА НА МОБИЛЬНЫХ ================= */
+/* ================= 12. ДИПЛОМ ================= */
 let lastGeneratedDiplomaData = null;
 
 document.getElementById('btn-get-diploma').onclick = () => {
@@ -1349,7 +1425,6 @@ document.getElementById('btn-get-diploma').onclick = () => {
   dCanvas.width = 1080; dCanvas.height = 1080;
   const dCtx = dCanvas.getContext('2d');
 
-  // Отрисовка
   dCtx.fillStyle = '#0f0f18'; dCtx.fillRect(0, 0, 1080, 1080);
   dCtx.strokeStyle = '#ffb703'; dCtx.lineWidth = 14; dCtx.strokeRect(30, 30, 1020, 1020);
   dCtx.strokeStyle = '#fff'; dCtx.lineWidth = 4; dCtx.strokeRect(52, 52, 976, 976);
@@ -1415,41 +1490,32 @@ document.getElementById('btn-get-diploma').onclick = () => {
   const today = new Date().toLocaleDateString('ru-RU');
   dCtx.fillText(`Дата выдачи: ${today} г. | Верифицировано на pokladish.ru`, 540, 980);
 
-  // Конвертация в Base64
   const dataURL = dCanvas.toDataURL('image/png');
   lastGeneratedDiplomaData = dataURL;
 
-  // Отрисовка превью модалки
   const prOverlay = document.getElementById('diploma-preview-overlay');
   const prImg = document.getElementById('diploma-img');
   prImg.src = dataURL;
   prOverlay.style.display = 'flex';
 };
 
-// Хендлер скачивания на мобильных 
 document.getElementById('btn-force-download').onclick = () => {
   if (!lastGeneratedDiplomaData) return;
   try {
     const link = document.createElement('a');
     link.download = `diplom_sphynx_${currentNick}.png`;
-    
-    // Безопасная конвертация в Blob
     const parts = lastGeneratedDiplomaData.split(';base64,');
     const contentType = parts[0].split(':')[1];
     const raw = window.atob(parts[1]);
     const rawLength = raw.length;
     const uInt8Array = new Uint8Array(rawLength);
-    for (let i = 0; i < rawLength; ++i) {
-      uInt8Array[i] = raw.charCodeAt(i);
-    }
+    for (let i = 0; i < rawLength; ++i) uInt8Array[i] = raw.charCodeAt(i);
     const blob = new Blob([uInt8Array], { type: contentType });
-    
     link.href = URL.createObjectURL(blob);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   } catch (e) {
-    // В случае сбоя открываем Base64 на новой вкладке
     const newTab = window.open();
     newTab.document.write(`<img src="${lastGeneratedDiplomaData}" style="width:100%" alt="Диплом">`);
   }
