@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>СФИНКС: БИТВА ЗА КРЫЛЬЯ 🍗</title>
+<title>ИГРА ПАПКИ beta 1.4.1 🍗</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍗</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@700;900&display=swap" rel="stylesheet">
 
-<!-- FIREBASE SDK ДЛЯ ОНЛАЙН-ЛИДЕРБОРДА -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -45,10 +44,34 @@ body {
   transition: background 0.5s ease;
 }
 
+/* ЭКРАН ЗАГРУЗКИ (BOOTLOADER) */
+#boot-screen {
+  position: fixed; inset: 0; z-index: 999999;
+  background: #050508; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 24px;
+  font-family: 'Press Start 2P', monospace; text-align: center;
+}
+.boot-title {
+  font-size: clamp(14px, 4vw, 20px); color: var(--yellow);
+  margin-bottom: 24px; text-shadow: 3px 3px 0 var(--red);
+}
+.boot-bar-box {
+  width: 100%; max-width: 340px; height: 22px; border: 3px solid #fff;
+  border-radius: 6px; padding: 2px; margin-bottom: 16px; background: #111;
+}
+#boot-bar-fill {
+  width: 0%; height: 100%; background: var(--red);
+  transition: width 0.15s ease;
+}
+#boot-log {
+  font-size: 9px; line-height: 1.8; color: #888;
+  height: 40px; margin-bottom: 24px;
+}
+
 /* МОДАЛКИ */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 9999;
-  background: rgba(5,5,8,0.94); backdrop-filter: blur(14px);
+  background: rgba(5,5,8,0.95); backdrop-filter: blur(14px);
   display: flex; align-items: center; justify-content: center; padding: 20px;
   transition: opacity 0.35s ease, visibility 0.35s ease;
 }
@@ -93,23 +116,17 @@ input.nick-input {
   -webkit-user-select: auto; user-select: auto;
 }
 
-/* ПАЛИТРА ТЕМЫ (9 ЦВЕТОВ) */
 .theme-picker-wrap {
   margin: 18px 0; background: #101018; border: 2px solid #333; border-radius: 14px; padding: 12px;
 }
-.theme-title {
-  font-family: 'Press Start 2P'; font-size: 8px; color: #aaa; margin-bottom: 10px;
-}
-.theme-dots {
-  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
-}
+.theme-title { font-family: 'Press Start 2P'; font-size: 8px; color: #aaa; margin-bottom: 10px; }
+.theme-dots { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .t-dot {
   width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff;
   cursor: pointer; transition: transform 0.15s, border-color 0.15s;
 }
 .t-dot.active { transform: scale(1.25); border-color: #fff; box-shadow: 0 0 10px #fff; }
 
-/* MINECRAFT СПЛЕШ */
 .beta-badge {
   display: inline-block; background: var(--red); color: #fff;
   font-family: 'Press Start 2P', monospace; font-size: 12px;
@@ -117,9 +134,7 @@ input.nick-input {
   box-shadow: 0 0 15px rgba(255,23,68,0.8), 3px 3px 0 #000;
   margin-bottom: 14px;
 }
-.mc-splash-wrap {
-  position: relative; width: 100%; min-height: 48px; margin-bottom: 14px;
-}
+.mc-splash-wrap { position: relative; width: 100%; min-height: 48px; margin-bottom: 14px; }
 .mc-splash {
   position: absolute; right: 8%; top: 0;
   font-family: 'Press Start 2P', monospace; font-size: clamp(9px, 3.2vw, 12px);
@@ -132,7 +147,6 @@ input.nick-input {
   100% { transform: rotate(-14deg) scale(1.15); }
 }
 
-/* АЧИВКА */
 #achieve-pop {
   position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
   background: #11111a; border: 3px solid var(--gold); border-radius: 16px;
@@ -149,13 +163,11 @@ main {
   max-width: 900px; margin: 0 auto; padding: 24px 16px 80px;
   display: flex; flex-direction: column; align-items: center; gap: 26px;
 }
-
 .profile-card {
-  width: 100%; max-width: 640px;
-  background: rgba(20, 20, 32, 0.94); border: 4px solid #fff; border-radius: 26px;
-  box-shadow: 8px 8px 0px var(--theme-glow); padding: 24px 18px; text-align: center;
+  width: 100%; max-width: 640px; background: rgba(20, 20, 32, 0.94);
+  border: 4px solid #fff; border-radius: 26px; box-shadow: 8px 8px 0px var(--theme-glow);
+  padding: 24px 18px; text-align: center;
 }
-
 .hero-banner {
   width: 100%; border-radius: 16px; border: 3px solid #fff;
   overflow: hidden; margin-bottom: 16px; cursor: pointer; position: relative;
@@ -173,14 +185,9 @@ main {
   color: #fff; margin-bottom: 8px; text-shadow: 3px 3px 0px var(--theme-glow);
 }
 .profile-sub { font-size: 13px; color: #ccc; margin-bottom: 16px; font-weight: 700; line-height: 1.4; }
+.action-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
 
-.action-row {
-  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px;
-}
-
-.stats-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;
-}
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
 @media (max-width: 560px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
 
 .stat-box {
@@ -201,13 +208,11 @@ main {
 
 /* ПОЛНОЭКРАННЫЙ ЭКРАН ИГРЫ */
 #game-section {
-  position: fixed; inset: 0;
-  width: 100vw; height: 100vh; height: 100dvh;
+  position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh;
   z-index: 99998; background: rgba(5,5,10,0.96); backdrop-filter: blur(14px);
   display: none; flex-direction: column; align-items: center; justify-content: center;
   touch-action: none; -webkit-touch-callout: none; padding: 10px;
 }
-
 .game-close-btn {
   position: absolute; top: 12px; right: 12px; z-index: 1000;
   background: #141420; border: 2px solid #fff; color: #fff;
@@ -222,9 +227,7 @@ main {
   box-shadow: 0 0 35px var(--theme-glow), 6px 6px 0px var(--theme-glow);
   overflow: hidden; touch-action: none;
 }
-#game-wrap.event-active {
-  animation: borderAlert 0.6s infinite alternate;
-}
+#game-wrap.event-active { animation: borderAlert 0.6s infinite alternate; }
 @keyframes borderAlert {
   0% { border-color: var(--yellow); box-shadow: 0 0 25px var(--yellow); }
   100% { border-color: var(--red); box-shadow: 0 0 35px var(--red); }
@@ -247,13 +250,36 @@ canvas.trip {
 #weight-fill { width: 65%; height: 100%; background: var(--yellow); transition: width 0.15s, background 0.2s; }
 #shield-fill { width: 0%; height: 100%; background: var(--gold); transition: width 0.1s; }
 
-/* БАННЕР СПЕЦ-СОБЫТИЯ */
 #event-banner {
   position: absolute; top: 60px; left: 0; right: 0; text-align: center;
   font-family: 'Press Start 2P'; font-size: 10px; color: var(--yellow);
   background: rgba(0,0,0,0.85); padding: 8px 0; border-top: 2px solid var(--red);
   border-bottom: 2px solid var(--red); z-index: 12; display: none;
 }
+
+/* ВСПЛЫВАЮЩИЙ ТИТУЛ */
+#title-pop {
+  position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%) scale(0);
+  font-family: 'Press Start 2P'; font-size: 13px; color: var(--yellow);
+  text-shadow: 3px 3px 0 var(--red), 0 0 20px #000; text-align: center;
+  pointer-events: none; z-index: 50; transition: transform 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  white-space: nowrap;
+}
+#title-pop.show { transform: translate(-50%, -50%) scale(1.2); }
+
+/* ДИАЛОГОВОЕ ОКНО ВЫБОРА (КАТ-СЦЕНА) */
+#dilemma-screen {
+  position: absolute; inset: 0; background: rgba(5,5,8,0.95);
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 60; padding: 22px; text-align: center;
+}
+#dilemma-screen h3 {
+  font-family: 'Press Start 2P'; font-size: 11px; color: var(--gold); margin-bottom: 14px;
+}
+#dilemma-desc {
+  font-size: 12px; line-height: 1.6; color: #fff; margin-bottom: 20px;
+}
+.dilemma-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; }
 
 .overlay {
   position: absolute; inset: 0; background: rgba(5,5,8,0.94);
@@ -266,7 +292,7 @@ canvas.trip {
 }
 .overlay p { font-size: 10px; line-height: 1.8; margin-bottom: 14px; color: #ccc; font-family: 'Press Start 2P', monospace; }
 
-/* УПРАВЛЕНИЕ: КНОПКИ ДВИЖЕНИЯ И БАТИН РЫК */
+/* КНОПКИ ДВИЖЕНИЯ И БАТИН РЫК */
 .touch-ctl {
   position: absolute; bottom: 12px; left: 12px; right: 12px;
   display: flex; justify-content: space-between; align-items: flex-end; z-index: 15; pointer-events: none;
@@ -279,7 +305,6 @@ canvas.trip {
 }
 .t-btn.active, .t-btn:active { background: rgba(255,23,68,0.7); transform: translateY(3px); }
 
-/* КНОПКА СУПЕРСПОСОБНОСТИ */
 .roar-btn {
   width: 70px; height: 70px; border-radius: 50%;
   background: #ffb703; border: 3px solid #fff; color: #000;
@@ -291,7 +316,6 @@ canvas.trip {
 .roar-btn:disabled { opacity: 0.45; filter: grayscale(1); box-shadow: none; }
 .roar-btn:active:not(:disabled) { transform: scale(0.92); }
 
-/* КАРТОЧКА ПРАВИЛ */
 .laws-content {
   text-align: left; font-size: 11px; line-height: 1.8; color: #eee;
   max-height: 60vh; overflow-y: auto; padding-right: 8px;
@@ -320,9 +344,36 @@ canvas.trip {
   padding: 10px 6px; font-family: 'Press Start 2P', monospace; font-size: 8px; opacity: 0.45;
 }
 .ach-item.unlocked { opacity: 1; border-style: solid; border-color: var(--gold); background: #261f0a; color: var(--gold); }
+
+/* ПРЕДПРОСМОТР ДИПЛОМА НА МОБИЛЬНЫХ СМАРТФОНАХ */
+#diploma-preview-overlay {
+  position: fixed; inset: 0; z-index: 1000000;
+  background: rgba(5,5,8,0.98); backdrop-filter: blur(14px);
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  padding: 16px; text-align: center;
+}
+.preview-inner {
+  width: 100%; max-width: 460px; height: 100%; max-height: 85vh;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+#preview-title {
+  font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--gold);
+}
+#diploma-img {
+  width: 100%; height: auto; max-height: 58dvh; object-fit: contain;
+  border: 3px solid #fff; border-radius: 14px; box-shadow: 0 0 25px var(--gold);
+}
 </style>
 </head>
 <body>
+
+<!-- ЭКРАН ЗАГРУЗКИ (BOOTLOADER) -->
+<div id="boot-screen">
+  <div class="boot-title">ИГРА ПАПКИ<br><span style="font-size:12px;color:var(--red)">BETA 1.4.1</span></div>
+  <div class="boot-bar-box"><div id="boot-bar-fill"></div></div>
+  <div id="boot-log">Инициализация биоса общаги...</div>
+  <button class="btn gold" id="btn-boot-start" style="display:none">ВОЙТИ В ИГРУ 🍗</button>
+</div>
 
 <div id="bg-layer"></div>
 <div id="bg-overlay"></div>
@@ -338,7 +389,7 @@ canvas.trip {
 </div>
 
 <!-- ФЕЙСКОНТРОЛЬ -->
-<div class="modal-overlay" id="gate-modal">
+<div class="modal-overlay" id="gate-modal" style="display:none">
   <div class="gate-box" id="gate-step-1">
     <h2>🚪 СТОЙ!<br><br>Ты первокурсница?</h2>
     <div style="display:flex;gap:12px;justify-content:center">
@@ -362,48 +413,34 @@ canvas.trip {
   </div>
 </div>
 
-<!-- МОДАЛКА: ЗАКОНЫ ПАПКИ (ПРАВИЛА И МЕХАНИКИ) -->
 <div class="modal-overlay" id="laws-modal" style="display:none">
   <div class="gate-box" style="max-width:560px">
     <h2>📜 СВЯЩЕННЫЕ ЗАКОНЫ ПАПКИ</h2>
     <div class="laws-content">
-      <p>Сфинкс — хранитель веса, вкуса и общажного спокойствия. Чтобы выжить и попасть в топ, соблюдай заветы:</p>
-      
-      <h3>🍗 1. ФАСТФУД (КАЛОРИИ И НАБОР)</h3>
+      <p>Сфинкс — хранитель веса, вкуса и общажного спокойствия:</p>
+      <h3>🍗 1. ФАСТФУД (МАССА)</h3>
       <ul>
-        <li>🍗 <b>Крыло:</b> +15 PTS, +2 кг, +10 калорий в щит.</li>
-        <li>🍟 <b>Фри / 🍕 Пицца / 🍔 Бургер:</b> плотная масса для набора авторитета.</li>
-        <li>🪣 <b>Баскет KFC:</b> +45 PTS, сразу +5 кг! Лови с умом, перевес близок.</li>
+        <li>🍗 <b>Крыло:</b> +15 PTS, +2 кг, +10 к заряду щита.</li>
+        <li>🍟 <b>Фри / 🍕 Пицца / 🍔 Бургер:</b> плотный набор веса.</li>
+        <li>🪣 <b>Баскет KFC:</b> +45 PTS, +5 кг. Остерегайся перевеса!</li>
       </ul>
-
-      <h3>🥦 2. ЗОЖ (СБРОС ВЕСА)</h3>
+      <h3>🥦 2. ЗОЖ (СУШКА)</h3>
       <ul>
-        <li>🥬 <b>Салат / 🥦 Брокколи / 🥒 Огурец / 💧 Вода:</b> сбрасывают вес от -1.5 до -2.5 кг.</li>
-        <li>🏋️ <b>Гантель:</b> мощнейшая сушка (-4.5 кг). Не дай весу упасть до 0 кг!</li>
+        <li>🥬 <b>Салат / 🥦 Брокколи / 🥒 Огурец:</b> сброс от -1.5 до -2.5 кг.</li>
+        <li>🏋️ <b>Гантель:</b> резкая сушка (-4.5 кг). Не истощись до 0!</li>
       </ul>
-
-      <h3>⚡ 3. БАЛАНС ЖИЗНИ И СМЕРТИ</h3>
+      <h3>⚡ 3. БАЛАНС ВЕСА</h3>
       <ul>
-        <li>⚖️ <b>Критический вес:</b> держи вес в пределах от <b>1 до 199 кг</b>. Если вес станет 0 или 200 — игра сразу окончена!</li>
-        <li>🛡️ <b>Золотой щит:</b> заполни шкалу калорий до 100%, чтобы включить защитное поле от бомб на 5 секунд.</li>
+        <li>⚖️ <b>Границы жизни:</b> от <b>1 до 199 кг</b>. Достиг 0 или 200 — раунд окончен!</li>
+        <li>🛡️ <b>Золотой щит:</b> при 100% шкалы калорий защищает от бомб на 5 сек.</li>
       </ul>
-
-      <h3>🚬 4. ОСОБЫЕ РЕЛИКВИИ</h3>
-      <ul>
-        <li>🚬 <b>Marlboro / Philip Morris:</b> тактический перекур. Включает эффект Slow-Mo (замедление времени).</li>
-        <li>🍹 <b>Пунш:</b> режим берсерка! Моментально возвращает идеальный вес 130 кг и позволяет пожирать бомбы.</li>
-        <li>💖 <b>Первокурсница:</b> +20 PTS, вызывает приступ романтического головокружения (трип-эффект).</li>
-        <li>💣 <b>Бомба:</b> мгновенный разнос, если нет активного щита или ярости.</li>
-      </ul>
-
-      <h3>🦁 5. СУПЕРСПОСОБНОСТЬ: «БАТИН РЫК»</h3>
-      <p>Кнопка <b>🦁 РЫК</b> взрывает все летящие бомбы ударной волной. Кулдаун — 20 секунд. Используй в безвыходных ситуациях!</p>
+      <h3>🦁 4. БАТИН РЫК</h3>
+      <p>Кнопка <b>🦁 РЫК</b> уничтожает все бомбы на экране ударной волной. Кулдаун — 20 секунд.</p>
     </div>
     <button class="btn gold" id="btn-close-laws" style="width:100%; margin-top:16px">УСВОИЛ, ПАПКА! 🤝</button>
   </div>
 </div>
 
-<!-- ДИСКЛЕЙМЕР ПЕРЕД СТАРТОМ -->
 <div class="modal-overlay" id="rules-modal" style="display:none">
   <div class="gate-box">
     <h2>⚠️ ВАЖНОЕ ОБРАЩЕНИЕ</h2>
@@ -417,10 +454,23 @@ canvas.trip {
   </div>
 </div>
 
+<!-- НОВАЯ МОБИЛЬНАЯ ПРЕДПРОСМОТРОВАЯ МОДАЛКА ДЛЯ ДИПЛОМА -->
+<div id="diploma-preview-overlay">
+  <div class="preview-inner">
+    <div id="preview-title">🏆 ДИПЛОМ СФИНКСА СФОРМИРОВАН!</div>
+    <div style="font-size: 8px; color:#aaa; font-family:'Press Start 2P'">Зажми картинку, чтобы сохранить на телефоне, или нажми СКАЧАТЬ:</div>
+    <img id="diploma-img" src="" alt="Официальный Диплом">
+    <div style="display:flex; gap:10px; width: 100%;">
+      <button class="btn gold" id="btn-force-download" style="flex:1">💾 СКАЧАТЬ</button>
+      <button class="btn alt" id="btn-close-preview" style="flex:1">✕ ЗАКРЫТЬ</button>
+    </div>
+  </div>
+</div>
+
 <main>
   <div class="profile-card">
     <div>
-      <span class="beta-badge">🔥 БЕТА-ТЕСТ v1.2 🔥</span>
+      <span class="beta-badge">🔥 ИГРА ПАПКИ beta 1.4.1 🔥</span>
     </div>
 
     <div class="mc-splash-wrap">
@@ -434,7 +484,6 @@ canvas.trip {
     <h1>ДАНИЛА «СФИНКС»</h1>
     <div class="profile-sub">Мудрый батя · Добряк · Сила и душа движения</div>
 
-    <!-- ВЫБОР НЕОНОВОЙ ПОДСВЕТКИ (9 ЦВЕТОВ) -->
     <div class="theme-picker-wrap">
       <div class="theme-title">🎨 НЕОНОВАЯ АТМОСФЕРА СФИНКСА (9 ЦВЕТОВ):</div>
       <div class="theme-dots" id="theme-dots"></div>
@@ -473,7 +522,6 @@ canvas.trip {
     </a>
   </div>
 
-  <!-- ОНЛАЙН ТАБЛИЦА ЛИДЕРОВ -->
   <div class="leaderboard-card">
     <h2 style="font-family:'Press Start 2P';font-size:13px;color:var(--gold);margin-bottom:16px;">🏆 ДОСКА ПОЧЁТА ПАПКИ (ОНЛАЙН)</h2>
     <ul class="lead-list" id="lead-container">
@@ -487,12 +535,23 @@ canvas.trip {
   </div>
 </main>
 
-<!-- ПОЛНОЭКРАННЫЙ ЭКРАН ИГРЫ -->
+<!-- ЭКРАН ИГРЫ -->
 <div id="game-section">
   <button class="game-close-btn" id="btn-close-game">✕ ВЫХОД</button>
 
   <div id="game-wrap">
     <div id="event-banner">🔥 СПЕЦ-СОБЫТИЕ: НАЛЕТ НА KFC! 🔥</div>
+    <div id="title-pop">ХОЛЕСТЕРИНОВЫЙ БОГ!</div>
+
+    <!-- КАТ-СЦЕНА С ДИЛЕММОЙ -->
+    <div id="dilemma-screen">
+      <h3 id="dilemma-title">СИТУАЦИЯ У РОСТИКСА</h3>
+      <p id="dilemma-desc">Зайти взять ведро крыльев по купону?</p>
+      <div class="dilemma-btns">
+        <button class="btn gold" id="dil-btn-1">ВЗЯТЬ ВЕДРО (+40 КГ)</button>
+        <button class="btn alt" id="dil-btn-2">ПРОЙТИ МИМО (-10 КГ)</button>
+      </div>
+    </div>
 
     <div class="hud">
       <div>
@@ -533,7 +592,44 @@ canvas.trip {
 </div>
 
 <script>
-/* ================= 1. ФОНОВАЯ МУЗЫКА ================= */
+/* ================= 1. БУТЛОАДЕР (ПРЕДЗАГРУЗКА) ================= */
+const bootLogs = [
+  "Проверка наличия первокурсниц... найдено 0",
+  "Калибровка холестерина... 100%",
+  "Загрузка мудрости Папки... 228/100",
+  "Прогрев фритюрницы в KFC на Проспекте...",
+  "Буферизация голосовых связок Сфинкса...",
+  "ГОТОВО К БИТВЕ!"
+];
+
+let bootProgress = 0;
+const bootBar = document.getElementById('boot-bar-fill');
+const bootLog = document.getElementById('boot-log');
+const bootBtn = document.getElementById('btn-boot-start');
+
+const bootInterval = setInterval(() => {
+  bootProgress += Math.floor(Math.random() * 14) + 8;
+  if (bootProgress >= 100) {
+    bootProgress = 100;
+    clearInterval(bootInterval);
+    bootBar.style.width = '100%';
+    bootLog.textContent = bootLogs[bootLogs.length - 1];
+    bootBtn.style.display = 'inline-block';
+  } else {
+    bootBar.style.width = bootProgress + '%';
+    const logIdx = Math.min(bootLogs.length - 2, Math.floor((bootProgress / 100) * (bootLogs.length - 1)));
+    bootLog.textContent = bootLogs[logIdx];
+  }
+}, 120);
+
+bootBtn.onclick = () => {
+  document.getElementById('boot-screen').style.display = 'none';
+  document.getElementById('gate-modal').style.display = 'flex';
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  playRandomBgMusic();
+};
+
+/* ================= 2. МУЗЫКА И ГОЛОСОВЫЕ СФИНКСА ================= */
 const BG_TRACKS = [
   "music/sound1.mp3", "music/sound2.mp3", "music/sound3.mp3",
   "music/sound4.mp3", "music/sound5.mp3", "music/sound6.mp3", "music/sound7.mp3"
@@ -549,23 +645,51 @@ function playRandomBgMusic() {
   do {
     nextIdx = Math.floor(Math.random() * BG_TRACKS.length);
   } while (nextIdx === currentBgIdx && BG_TRACKS.length > 1);
-  
   currentBgIdx = nextIdx;
   bgAudio.src = BG_TRACKS[currentBgIdx];
   bgAudio.play().catch(() => {});
 }
 bgAudio.onended = playRandomBgMusic;
 
-/* ================= 2. ВЫБОР НЕОНОВОЙ ПОДСВЕТКИ (9 ЦВЕТОВ) ================= */
+function playSoundFallback(paths, vol=1.0) {
+  let idx = 0;
+  function tryNext() {
+    if (idx >= paths.length) return;
+    const a = new Audio(paths[idx]);
+    a.volume = vol;
+    a.play().catch(() => {
+      idx++;
+      tryNext();
+    });
+  }
+  tryNext();
+}
+
+const VOICE = {
+  bomb() {
+    playSoundFallback([
+      "music/voice_bomb.mp3.m4a",
+      "voice_bomb.mp3.m4a",
+      "music/voice_bomb.mp3",
+      "voice_bomb.mp3"
+    ], 1.0);
+  },
+  boss() {
+    playSoundFallback([
+      "music/voice_boss.mp3.m4a",
+      "voice_boss.mp3.m4a",
+      "music/voice_boss.mp3",
+      "voice_boss.mp3"
+    ], 1.0);
+  }
+};
+
+/* ================= 3. ВЫБОР НЕОНОВОЙ ПОДСВЕТКИ (9 ЦВЕТОВ) ================= */
 const THEME_COLORS = [
-  { name: 'KFC Red', val: '#ff1744' },
-  { name: 'Gold Sphinx', val: '#ffb703' },
-  { name: 'Cyber Purple', val: '#d500f9' },
-  { name: 'Freshman Pink', val: '#ff4081' },
-  { name: 'Saratov Blue', val: '#00e5ff' },
-  { name: 'Hostel Green', val: '#00e676' },
-  { name: 'Toxic Lime', val: '#aeea00' },
-  { name: 'Smoke White', val: '#e0e0e0' },
+  { name: 'KFC Red', val: '#ff1744' }, { name: 'Gold Sphinx', val: '#ffb703' },
+  { name: 'Cyber Purple', val: '#d500f9' }, { name: 'Freshman Pink', val: '#ff4081' },
+  { name: 'Saratov Blue', val: '#00e5ff' }, { name: 'Hostel Green', val: '#00e676' },
+  { name: 'Toxic Lime', val: '#aeea00' }, { name: 'Smoke White', val: '#e0e0e0' },
   { name: 'Deep Indigo', val: '#3d5afe' }
 ];
 
@@ -576,19 +700,16 @@ function applyTheme(color) {
   document.documentElement.style.setProperty('--theme-glow', color);
   renderThemeDots();
 }
-
 function renderThemeDots() {
-  const cont = document.getElementById('theme-dots');
-  cont.innerHTML = THEME_COLORS.map(c => `
+  document.getElementById('theme-dots').innerHTML = THEME_COLORS.map(c => `
     <div class="t-dot ${c.val === currentTheme ? 'active' : ''}" 
          style="background:${c.val}" 
-         onclick="applyTheme('${c.val}')"
-         title="${c.name}"></div>
+         onclick="applyTheme('${c.val}')" title="${c.name}"></div>
   `).join('');
 }
 applyTheme(currentTheme);
 
-/* ================= 3. MINECRAFT СПЛЕШИ ================= */
+/* ================= 4. MINECRAFT СПЛЕШИ ================= */
 const SPLASH_TEXTS = [
   "Ни одно крыло не пострадало!", "Первокурсницы живы!", "Папка лучший!",
   "Хочешь карьерный ростик?", "Пахан медиа", "Повелитель мака",
@@ -596,13 +717,10 @@ const SPLASH_TEXTS = [
   "Истребитель девственниц", "14", "Сфинкс", "88"
 ];
 const splashEl = document.getElementById('mc-splash');
-function setRandomSplash() {
-  splashEl.textContent = SPLASH_TEXTS[Math.floor(Math.random() * SPLASH_TEXTS.length)];
-}
-setRandomSplash();
-splashEl.onclick = setRandomSplash;
+splashEl.onclick = () => { splashEl.textContent = SPLASH_TEXTS[Math.floor(Math.random() * SPLASH_TEXTS.length)]; };
+splashEl.textContent = SPLASH_TEXTS[0];
 
-/* ================= 4. ЗВУКИ (WEB AUDIO) ================= */
+/* ================= 5. WEB AUDIO SFX ================= */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playTone(freq, type, duration, vol=0.1) {
   try {
@@ -622,11 +740,11 @@ const SFX = {
   shield() { [260, 330, 390, 520, 660].forEach((f, i) => setTimeout(() => playTone(f, 'sine', 0.12, 0.15), i * 40)); },
   fanfare() { [440, 554, 659, 880].forEach((f, i) => setTimeout(() => playTone(f, 'triangle', 0.22, 0.2), i * 70)); },
   heartbeat() { playTone(55, 'sine', 0.14, 0.4); setTimeout(() => playTone(48, 'sine', 0.16, 0.35), 110); },
-  roar() { [120, 95, 70, 50].forEach((f, i) => setTimeout(() => playTone(f, 'sawtooth', 0.35, 0.4), i * 60)); },
+  roar() { [130, 100, 75, 45].forEach((f, i) => setTimeout(() => playTone(f, 'sawtooth', 0.4, 0.45), i * 50)); },
   combo() { playTone(600, 'square', 0.1, 0.15); setTimeout(() => playTone(850, 'square', 0.12, 0.2), 50); }
 };
 
-/* ================= 5. МОДАЛКИ И ФЕЙСКОНТРОЛЬ ================= */
+/* ================= 6. МОДАЛКИ И ФЕЙСКОНТРОЛЬ ================= */
 const gateModal = document.getElementById('gate-modal');
 const rulesModal = document.getElementById('rules-modal');
 const lawsModal = document.getElementById('laws-modal');
@@ -650,8 +768,6 @@ document.getElementById('g-save-nick').onclick = () => {
   if (val) currentNick = val;
   localStorage.setItem('sphynx_nick', currentNick);
   gateModal.classList.add('hide');
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  playRandomBgMusic();
 };
 
 document.getElementById('btn-show-laws').onclick = () => { lawsModal.style.display = 'flex'; };
@@ -698,11 +814,11 @@ document.getElementById('hero-tap').onclick = () => {
   tapTimer = setTimeout(() => tapCount = 0, 1200);
   if (tapCount >= 5) {
     tapCount = 0; weight = 100; shieldTimer = 600; SFX.fanfare();
-    alert("⚡ СИЛА ПАПКИ АКТИВИРОВАНА: Идеальный вес 100 кг и защитный щит!");
+    alert("⚡ СИЛА ПАПКИ АКТИВИРОВАНА: Вес 100 кг и золотой щит!");
   }
 };
 
-/* ================= 6. АЧИВКИ ================= */
+/* ================= 7. АЧИВКИ ================= */
 const ACHIEVEMENTS = [
   { id: 'first_bite', t: 'Первый кусь' }, { id: 'wings_50', t: 'Фанатик KFC' },
   { id: 'wings_150', t: 'Баскет-Монстр' }, { id: 'fresh_3', t: 'Лучший любовник' },
@@ -741,7 +857,7 @@ function renderAchievements() {
 }
 renderAchievements();
 
-/* ================= 7. ОНЛАЙН-ЛИДЕРБОРД (FIREBASE REALTIME DB) ================= */
+/* ================= 8. FIREBASE LEADERBOARD ================= */
 const firebaseConfig = { databaseURL: "https://sphynx-game-default-rtdb.firebaseio.com" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -778,7 +894,57 @@ leaderboardsRef.on('value', snapshot => {
   `).join('');
 });
 
-/* ================= 8. ИГРОВОЙ ДВИЖОК ================= */
+/* ================= 9. 15 КАТ-СЦЕН С ВЫБОРАМИ ================= */
+const DILEMMAS = [
+  { t: "ВХОД В РОСТИКС", q: "Зайти взять ведро крыльев по купону?", b1: "ВЗЯТЬ (+40 КГ, +80 PTS)", b2: "МИМО (-10 КГ)", a1: () => { weight = Math.min(200, weight + 40); score += 80; }, a2: () => { weight = Math.max(0, weight - 10); } },
+  { t: "ВАХТЕРША ТЁТЯ ЛЮБА", q: "Время 23:05. Вертушка закрывается!", b1: "ДАТЬ КРЫЛЫШКО (ЩИТ)", b2: "ПРОРВАТЬСЯ (+50 PTS)", a1: () => { shieldTimer = 360; }, a2: () => { score += 50; } },
+  { t: "ПЕРВОКУРСНИЦА У КУРИЛКИ", q: "Спрашивает дорогу до 5 корпуса.", b1: "ПРОВОДИТЬ (ТРИП, +60 PTS)", b2: "«Я ЗАНЯТ» (СКОРОСТЬ)", a1: () => { tripTimer = 300; score += 60; }, a2: () => { speedMultiplier *= 1.2; } },
+  { t: "КЕНТ НА ДЕВЯТКЕ", q: "«Папка, прыгай, погнали на набережную!»", b1: "ПРЫГНУТЬ (ОЧИСТКА ПОЛЯ)", b2: "ПЕШКОМ (-15 КГ КАРДИО)", a1: () => { drops.length = 0; score += 40; }, a2: () => { weight = Math.max(0, weight - 15); } },
+  { t: "СПАМ В ТЕЛЕГРАМЕ", q: "Купон: Баскет Дуэт за 199 рублей!", b1: "АКТИВИРОВАТЬ (РЕЙД КРЫЛЬЕВ)", b2: "УДАЛИТЬ СПАМ (+50 PTS)", a1: () => { activeEvent = 'kfc_raid'; eventTimer = 8; }, a2: () => { score += 50; } },
+  { t: "ПРАВИЛО ПЯТИ СЕКУНД", q: "Крыло упало на асфальт!", b1: "СЪЕСТЬ (+30 PTS)", b2: "ВЫКИНУТЬ (-5 КГ)", a1: () => { score += 30; weight = Math.min(200, weight + 5); }, a2: () => { weight = Math.max(0, weight - 5); } },
+  { t: "ПАРА ПО ВЫШМАТУ", q: "Препод угрожает незачетом за пропуски.", b1: "УСНУТЬ НА ПАРЕ (SLOW-MO)", b2: "В ФУДКОРТ (+25 КГ)", a1: () => { slowMoTimer = 350; }, a2: () => { weight = Math.min(200, weight + 25); } },
+  { t: "СТРЕЛОК У ОБЩАГИ", q: "Подозрительный тип просит сигарету.", b1: "УГОСТИТЬ (ЗОЛОТОЙ ЩИТ)", b2: "«ПОСЛЕДНЯЯ» (РЫК ГОТОВ)", a1: () => { shieldTimer = 300; }, a2: () => { roarCooldown = 0; roarBtn.disabled = false; roarTxt.textContent = 'РЫК'; } },
+  { t: "НАПОЛЬНЫЕ ВЕСЫ", q: "Пацаны выставили весы посреди этажа.", b1: "ВСТАТЬ ГОРДО (+100 PTS)", b2: "ПНУТЬ ВЕСЫ (ФИКС ВЕСА)", a1: () => { score += 100; }, a2: () => { weight = 100; } },
+  { t: "ЗВОНОК ОТ ЕВЫ-ЕВЫ", q: "Входящий в 02:00 ночи...", b1: "СКИНУТЬ (ОЧИСТКА БОМБ)", b2: "ОТВЕТИТЬ (ТРИП-ЭФФЕКТ)", a1: () => { drops.length = 0; }, a2: () => { tripTimer = 300; } },
+  { t: "ШАУРМА НА СЕННОМ", q: "Чесночный соус манит за версту.", b1: "ДВОЙНАЯ С СЫРОМ (+50 КГ)", b2: "ПРОЙТИ МИМО (-20 КГ)", a1: () => { weight = Math.min(200, weight + 50); shieldTimer = 300; }, a2: () => { weight = Math.max(0, weight - 20); } },
+  { t: "ЭНЕРГЕТИК ИЗ КБ", q: "Холодная банка ядрёного пойла.", b1: "ВЫПИТЬ ЗАЛПОМ (СКОРОСТЬ)", b2: "ОСТАВИТЬ (СЕЙВ ОТ БОМБЫ)", a1: () => { speedMultiplier *= 1.3; }, a2: () => { shieldCharge = 100; } },
+  { t: "ПЕЛЬМЕНИ В ЧАЙНИКЕ", q: "На общей кухне варят казенный деликатес.", b1: "ВЛЕТЕТЬ В ДОЛЮ (+30 КГ)", b2: "ОТЧИТАТЬ СТУДЕНТОВ (+70 PTS)", a1: () => { weight = Math.min(200, weight + 30); comboMultiplier = Math.min(5, comboMultiplier + 2); }, a2: () => { score += 70; } },
+  { t: "СТУДЕНЧЕСКИЙ ПАТРУЛЬ", q: "«Молодой человек, ваши документы!»", b1: "ПОКАЗАТЬ СТУДАК", b2: "ХАРИЗМА ПАПКИ (БАСКЕТ)", a1: () => { slowMoTimer = 180; }, a2: () => { score += 60; weight = Math.min(200, weight + 10); } },
+  { t: "ЗОЛОТОЙ БАСКЕТ СУДЬБЫ", q: "Финал искушения на горизонте!", b1: "ПОЖРАТЬ СУДЬБУ (+300 PTS, 190 КГ)", b2: "ДЛЯ ПЕРВОКУРСНИЦ (ЩИТ)", a1: () => { score += 300; weight = 190; }, a2: () => { shieldTimer = 500; } }
+];
+
+let nextDilemmaScore = 80;
+function showDilemma() {
+  running = false;
+  VOICE.boss();
+  const d = DILEMMAS[Math.floor(Math.random() * DILEMMAS.length)];
+  document.getElementById('dilemma-title').textContent = d.t;
+  document.getElementById('dilemma-desc').textContent = d.q;
+  
+  const b1 = document.getElementById('dil-btn-1');
+  const b2 = document.getElementById('dil-btn-2');
+  b1.textContent = d.b1;
+  b2.textContent = d.b2;
+
+  b1.onclick = () => { d.a1(); closeDilemma(); };
+  b2.onclick = () => { d.a2(); closeDilemma(); };
+  document.getElementById('dilemma-screen').style.display = 'flex';
+}
+
+function closeDilemma() {
+  document.getElementById('dilemma-screen').style.display = 'none';
+  running = true;
+}
+
+/* ================= 10. ВСПЛЫВАЮЩИЕ ТИТУЛЫ ================= */
+function showTitlePop(txt) {
+  const pop = document.getElementById('title-pop');
+  pop.textContent = txt;
+  pop.classList.add('show');
+  setTimeout(() => pop.classList.remove('show'), 1600);
+}
+
+/* ================= 11. ДВИЖОК ИГРЫ ================= */
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 
@@ -792,17 +958,13 @@ let slowMoTimer = 0, rageTimer = 0, tripTimer = 0;
 let gameOver = false, running = false, gameSeconds = 0, speedMultiplier = 1.0;
 let timerInterval = null, vegeStreak = 0;
 
-// КОМБО-СТРИК
-let comboCount = 0;
-let comboMultiplier = 1;
-
-// БАТИН РЫК (СУПЕРСПОСОБНОСТЬ)
+let comboCount = 0, comboMultiplier = 1;
 let roarCooldown = 0;
 const ROAR_MAX_COOLDOWN = 20;
 
-// СПЕЦ-СОБЫТИЯ
-let activeEvent = null;
-let eventTimer = 0;
+let activeEvent = null, eventTimer = 0;
+let screenShake = 0;
+let shockwaves = [];
 
 const FLOOR_Y = 590;
 const player = { w: 104, h: 130, x: 188, y: FLOOR_Y - 130, stuckTicks: 0, stepAnim: 0 };
@@ -810,21 +972,16 @@ const drops = [], particles = [];
 let spawnTick = 0;
 
 const DROP_TYPES = [
-  // ФАСТФУД (45%)
   { t:'wing', e:'🍗', w: 16, cal: 10, wt: +2, pts: 15 },
   { t:'fries', e:'🍟', w: 11, cal: 10, wt: +1.5, pts: 10 },
   { t:'pizza', e:'🍕', w: 8,  cal: 15, wt: +2.5, pts: 20 },
   { t:'burger', e:'🍔', w: 7,  cal: 15, wt: +3, pts: 25 },
   { t:'basket', e:'🪣', w: 3,  cal: 25, wt: +5, pts: 45 },
-
-  // ЗОЖ (45%)
   { t:'salad', e:'🥬', w: 16, cal: -10, wt: -2, pts: 5 },
   { t:'broc', e:'🥦', w: 11, cal: -10, wt: -2.5, pts: 5 },
   { t:'cucum', e:'🥒', w: 8,  cal: -10, wt: -2, pts: 5 },
   { t:'water', e:'💧', w: 7,  cal: -5,  wt: -1.5, pts: 5 },
   { t:'dumb', e:'🏋️', w: 3,  cal: -15, wt: -4.5, pts: 15 },
-
-  // ОСОБЫЕ (10%)
   { t:'marlboro', e:'🚬', label:'Marlboro', w: 2, pts: 30 },
   { t:'philip', e:'🚬', label:'Philip Morris', w: 3, pts: 15 },
   { t:'punch', e:'🍹', w: 2, pts: 50 },
@@ -850,7 +1007,7 @@ function setupButton(btnId, keyProp) {
 setupButton('b-left', 'left');
 setupButton('b-right', 'right');
 
-// БАТИН РЫК
+// БАТИН РЫК С ВОЛНОЙ
 const roarBtn = document.getElementById('b-roar');
 const roarTxt = document.getElementById('roar-txt');
 function activateRoar() {
@@ -858,8 +1015,9 @@ function activateRoar() {
   roarCooldown = ROAR_MAX_COOLDOWN;
   roarBtn.disabled = true;
   SFX.roar();
+  screenShake = 18;
+  shockwaves.push({ x: player.x + player.w/2, y: player.y + player.h/2, r: 10, maxR: 260 });
 
-  // Уничтожаем все бомбы на экране с искрами
   let bombCount = 0;
   for (let i = drops.length - 1; i >= 0; i--) {
     if (drops[i].meta.t === 'bomb') {
@@ -869,6 +1027,7 @@ function activateRoar() {
     }
   }
   score += bombCount * 25;
+  if (bombCount >= 3) showTitlePop('РАЗНЁС В ЩЕПКИ!');
 }
 roarBtn.addEventListener('touchstart', (e) => { e.preventDefault(); activateRoar(); }, { passive: false });
 roarBtn.addEventListener('click', activateRoar);
@@ -876,12 +1035,8 @@ roarBtn.addEventListener('click', activateRoar);
 document.getElementById('game-wrap').addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
 
 function pickRandomDrop() {
-  if (activeEvent === 'kfc_raid') {
-    return Math.random() < 0.6 ? DROP_TYPES[0] : DROP_TYPES[4]; // Только крылья и баскеты!
-  }
-  if (activeEvent === 'smoke_hour') {
-    return Math.random() < 0.7 ? DROP_TYPES[10] : DROP_TYPES[12]; // Сигареты и пунш!
-  }
+  if (activeEvent === 'kfc_raid') return Math.random() < 0.6 ? DROP_TYPES[0] : DROP_TYPES[4];
+  if (activeEvent === 'smoke_hour') return Math.random() < 0.7 ? DROP_TYPES[10] : DROP_TYPES[12];
   const totalW = DROP_TYPES.reduce((a,b) => a + b.w, 0);
   let r = Math.random() * totalW;
   for (const d of DROP_TYPES) { if (r < d.w) return d; r -= d.w; }
@@ -899,6 +1054,14 @@ function addSparkle(x, y, color) {
 
 function update() {
   if (!running || gameOver) return;
+
+  if (score >= nextDilemmaScore) {
+    nextDilemmaScore += 90 + Math.floor(Math.random() * 40);
+    showDilemma();
+    return;
+  }
+
+  if (screenShake > 0) screenShake--;
   if (slowMoTimer > 0) slowMoTimer--;
   if (rageTimer > 0) { rageTimer--; for (let i = 0; i < 2; i++) addSparkle(player.x + Math.random()*player.w, player.y + Math.random()*player.h, '#ff1744'); }
 
@@ -952,7 +1115,6 @@ function update() {
       drops.splice(i, 1);
       continue;
     }
-    // Если еда упала мимо — сброс комбо!
     if (d.y > canvas.height + 40) {
       if (d.meta.t !== 'bomb') {
         comboCount = 0; comboMultiplier = 1;
@@ -962,6 +1124,11 @@ function update() {
     }
   }
 
+  for (let i = shockwaves.length - 1; i >= 0; i--) {
+    const sw = shockwaves[i]; sw.r += 14;
+    if (sw.r >= sw.maxR) shockwaves.splice(i, 1);
+  }
+
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i]; p.x += p.vx; p.y += p.vy; p.life--;
     if (p.life <= 0) particles.splice(i, 1);
@@ -969,12 +1136,12 @@ function update() {
 
   if (weight >= MAX_WEIGHT) {
     triggerAchievement('end_fat');
-    endGame("Всё, небеса Рональда Макдональда забрали его душу грешную 🍗🕊️", "Сфинкс набрал абсолютную массу авторитета.");
+    endGame("ПУТЬ ИНЦЕЛА 💔", "Сфинкс набрал массу 200 кг. Диван общаги забрал его навсегда.");
     return;
   }
   if (weight <= 0) {
     triggerAchievement('end_skinny');
-    endGame("Ну, впрочем, это лишь игра... 💀🪶", "Сфинкс истощился от листьев салата.");
+    endGame("ПОЦЕЛУЙ ПЕРВОКУРСНИЦЫ 💖", "Идеальная сушка! Первокурсница оценила форму Данилы.");
     return;
   }
 
@@ -986,11 +1153,12 @@ function update() {
 }
 
 function handleCatch(meta) {
-  // Комбо растет за каждую пойманную еду/реликвию
   comboCount++;
   if (comboCount % 5 === 0 && comboMultiplier < 5) {
     comboMultiplier++;
     SFX.combo();
+    if (comboMultiplier === 3) showTitlePop('АППЕТИТ РАСТЁТ!');
+    if (comboMultiplier === 5) showTitlePop('ХОЛЕСТЕРИНОВЫЙ БОГ!');
   }
   document.getElementById('combo-indicator').textContent = `COMBO: x${comboMultiplier}`;
 
@@ -1027,9 +1195,10 @@ function handleCatch(meta) {
     if (sessionStats.marlboro >= 3) triggerAchievement('marlboro_3');
   } else if (meta.t === 'philip') slowMoTimer = 150;
 
-  if (meta.t === 'punch') { rageTimer = 250; weight = 130; }
+  if (meta.t === 'punch') { rageTimer = 250; weight = 130; showTitlePop('БЕРСЕРК ОБЩАГИ!'); }
   if (meta.t === 'freshman') {
     tripTimer = 300; sessionStats.fresh++;
+    showTitlePop('САХАРНЫЙ МАЛЬЧИК!');
     if (sessionStats.fresh >= 3) triggerAchievement('fresh_3');
     if (sessionStats.fresh >= 10) triggerAchievement('fresh_10');
   }
@@ -1041,13 +1210,19 @@ function handleCatch(meta) {
       for (let k = 0; k < 15; k++) addSparkle(player.x + player.w/2, player.y + player.h/2, '#ffd23f');
     } else {
       SFX.bomb();
+      VOICE.bomb();
       if (gameSeconds <= 10) triggerAchievement('fast_rip');
-      endGame("Разорвало на куски! 💥", "Бомба оказалась быстрее Сфинкса.");
+      endGame("РАЗОРВАЛО НА КУСКИ! 💥", "Бомба оказалась быстрее Сфинкса.");
     }
   }
 }
 
 function draw() {
+  ctx.save();
+  if (screenShake > 0) {
+    ctx.translate((Math.random()-0.5)*screenShake, (Math.random()-0.5)*screenShake);
+  }
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#171724'; ctx.fillRect(0, FLOOR_Y, canvas.width, canvas.height - FLOOR_Y);
   ctx.fillStyle = currentTheme; ctx.fillRect(0, FLOOR_Y, canvas.width, 3);
@@ -1061,6 +1236,11 @@ function draw() {
       ctx.fillStyle = d.meta.t === 'freshman' ? '#ff4081' : '#ffd23f';
       ctx.fillText(d.meta.label, d.x, d.y + 15);
     }
+  });
+
+  shockwaves.forEach(sw => {
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2); ctx.stroke();
   });
 
   let currentSprite = imgs.fat;
@@ -1090,6 +1270,8 @@ function draw() {
   }
 
   particles.forEach(p => { ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, 4, 4); });
+  ctx.restore();
+
   requestAnimationFrame(() => { update(); draw(); });
 }
 
@@ -1109,7 +1291,7 @@ function resetGame() {
   score = 0; weight = 130; shieldCharge = 0; shieldTimer = 0;
   slowMoTimer = 0; rageTimer = 0; tripTimer = 0; drops.length = 0; particles.length = 0;
   comboCount = 0; comboMultiplier = 1; roarCooldown = 0; roarBtn.disabled = false;
-  roarTxt.textContent = 'РЫК'; activeEvent = null; eventTimer = 0;
+  roarTxt.textContent = 'РЫК'; activeEvent = null; eventTimer = 0; nextDilemmaScore = 80;
   document.getElementById('game-wrap').classList.remove('event-active');
   document.getElementById('event-banner').style.display = 'none';
   player.x = (canvas.width - player.w) / 2; gameSeconds = 0; speedMultiplier = 1.0;
@@ -1121,20 +1303,17 @@ function resetGame() {
     if (!running) return;
     gameSeconds++;
     
-    // Кулдаун рыка
     if (roarCooldown > 0) {
       roarCooldown--;
       roarTxt.textContent = `${roarCooldown}s`;
       if (roarCooldown === 0) { roarBtn.disabled = false; roarTxt.textContent = 'РЫК'; }
     }
 
-    // Скорость раз в 60 сек
     if (gameSeconds % 60 === 0) {
       speedMultiplier = +(speedMultiplier * 1.33).toFixed(2);
       document.getElementById('speed-indicator').textContent = `СКОРОСТЬ: ${speedMultiplier}x`;
     }
 
-    // Спец-события каждые 50 сек
     if (gameSeconds > 0 && gameSeconds % 50 === 0 && !activeEvent) {
       const r = Math.random();
       activeEvent = r > 0.5 ? 'kfc_raid' : 'smoke_hour';
@@ -1162,18 +1341,19 @@ function resetGame() {
 
 document.getElementById('restart-btn').onclick = resetGame;
 
-/* ================= 9. ГЕНЕРАТОР ОФИЦИАЛЬНОГО ДИПЛОМА СФИНКСА ================= */
+/* ================= 12. ПРЕДПРОСМОТР И ОТПРАВКА ДИПЛОМА НА МОБИЛЬНЫХ ================= */
+let lastGeneratedDiplomaData = null;
+
 document.getElementById('btn-get-diploma').onclick = () => {
   const dCanvas = document.createElement('canvas');
   dCanvas.width = 1080; dCanvas.height = 1080;
   const dCtx = dCanvas.getContext('2d');
 
-  // Фон и золотая двойная рамка
+  // Отрисовка
   dCtx.fillStyle = '#0f0f18'; dCtx.fillRect(0, 0, 1080, 1080);
   dCtx.strokeStyle = '#ffb703'; dCtx.lineWidth = 14; dCtx.strokeRect(30, 30, 1020, 1020);
   dCtx.strokeStyle = '#fff'; dCtx.lineWidth = 4; dCtx.strokeRect(52, 52, 976, 976);
 
-  // Шапка
   dCtx.textAlign = 'center';
   dCtx.fillStyle = '#ff1744';
   dCtx.font = 'bold 36px "Rubik", sans-serif';
@@ -1187,12 +1367,10 @@ document.getElementById('btn-get-diploma').onclick = () => {
   dCtx.font = '26px "Rubik", sans-serif';
   dCtx.fillText('НАСТОЯЩИЙ ДОКУМЕНТ ВЫДАН:', 540, 280);
 
-  // Имя студента
   dCtx.fillStyle = '#fff';
   dCtx.font = '900 52px "Rubik", sans-serif';
   dCtx.fillText(currentNick.toUpperCase(), 540, 350);
 
-  // Звание в зависимости от счета
   let rank = "МЛАДШИЙ СТУДЕНТ НА ДИЕТЕ";
   if (score >= 1000) rank = "ЛЕГЕНДАРНЫЙ БАСКЕТ-ГЕНЕРАЛ";
   else if (score >= 500) rank = "ПОЧЁТНЫЙ ХРАНИТЕЛЬ ХОЛЕСТЕРИНА";
@@ -1202,13 +1380,11 @@ document.getElementById('btn-get-diploma').onclick = () => {
   dCtx.font = 'bold 32px "Rubik", sans-serif';
   dCtx.fillText(`ЗВАНИЕ: ${rank}`, 540, 420);
 
-  // Статистика
   dCtx.fillStyle = '#eee';
   dCtx.font = '30px "Rubik", sans-serif';
   dCtx.fillText(`РЕЗУЛЬТАТ В БИТВЕ: ${score} ОЧКОВ`, 540, 480);
   dCtx.fillText(`ВРЕМЯ ВЫЖИВАНИЯ: ${gameSeconds} СЕК.`, 540, 530);
 
-  // Фото Данилы в центре (если доступно)
   const heroImg = document.querySelector('.hero-banner img');
   if (heroImg && heroImg.complete) {
     try {
@@ -1224,7 +1400,6 @@ document.getElementById('btn-get-diploma').onclick = () => {
     } catch(e) {}
   }
 
-  // Круглая золотая печать
   dCtx.save();
   dCtx.translate(840, 880);
   dCtx.strokeStyle = '#ff1744'; dCtx.lineWidth = 6;
@@ -1235,20 +1410,57 @@ document.getElementById('btn-get-diploma').onclick = () => {
   dCtx.fillText('★ СФИНКС ★', 0, 34);
   dCtx.restore();
 
-  // Подвал
   dCtx.fillStyle = '#777';
   dCtx.font = '22px "Rubik", sans-serif';
   const today = new Date().toLocaleDateString('ru-RU');
   dCtx.fillText(`Дата выдачи: ${today} г. | Верифицировано на pokladish.ru`, 540, 980);
 
-  // Скачивание файла
-  const link = document.createElement('a');
-  link.download = `diplom_sphynx_${currentNick}.png`;
-  link.href = dCanvas.toDataURL('image/png');
-  link.click();
+  // Конвертация в Base64
+  const dataURL = dCanvas.toDataURL('image/png');
+  lastGeneratedDiplomaData = dataURL;
+
+  // Отрисовка превью модалки
+  const prOverlay = document.getElementById('diploma-preview-overlay');
+  const prImg = document.getElementById('diploma-img');
+  prImg.src = dataURL;
+  prOverlay.style.display = 'flex';
+};
+
+// Хендлер скачивания на мобильных 
+document.getElementById('btn-force-download').onclick = () => {
+  if (!lastGeneratedDiplomaData) return;
+  try {
+    const link = document.createElement('a');
+    link.download = `diplom_sphynx_${currentNick}.png`;
+    
+    // Безопасная конвертация в Blob
+    const parts = lastGeneratedDiplomaData.split(';base64,');
+    const contentType = parts[0].split(':')[1];
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+    for (let i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+    const blob = new Blob([uInt8Array], { type: contentType });
+    
+    link.href = URL.createObjectURL(blob);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (e) {
+    // В случае сбоя открываем Base64 на новой вкладке
+    const newTab = window.open();
+    newTab.document.write(`<img src="${lastGeneratedDiplomaData}" style="width:100%" alt="Диплом">`);
+  }
+};
+
+document.getElementById('btn-close-preview').onclick = () => {
+  document.getElementById('diploma-preview-overlay').style.display = 'none';
 };
 
 draw();
 </script>
 </body>
 </html>
+
