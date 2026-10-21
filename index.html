@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>СФИНКС: БИТВА ЗА КРЫЛЬЯ 🍗</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍗</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@700;900&display=swap" rel="stylesheet">
@@ -20,11 +20,15 @@
   --mc-yellow: #ffff55;
   --bg: #0b0b12;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+* {
+  box-sizing: border-box; margin: 0; padding: 0;
+  user-select: none; -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
 html { scroll-behavior: smooth; }
 body {
   background: var(--bg); color: #fff; font-family: 'Rubik', sans-serif;
-  min-height: 100vh; overflow-x: hidden; position: relative;
+  min-height: 100vh; min-height: 100dvh; overflow-x: hidden; position: relative;
 }
 
 #bg-layer {
@@ -72,6 +76,8 @@ body {
   border-radius: 12px; background: var(--red); color: #fff;
   box-shadow: 4px 4px 0px #000; transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
   text-decoration: none; display: inline-block; text-align: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px #000; }
 .btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0px #000; }
@@ -85,6 +91,7 @@ input.nick-input {
   width: 100%; padding: 14px; font-family: 'Press Start 2P', monospace;
   font-size: 13px; text-align: center; background: #000; color: var(--yellow);
   border: 3px solid #fff; border-radius: 12px; margin-bottom: 18px; outline: none;
+  -webkit-user-select: auto; user-select: auto;
 }
 
 /* MINECRAFT СПЛЕШ И БЕТА ТЕСТ */
@@ -126,8 +133,8 @@ input.nick-input {
   background: #11111a; border: 3px solid var(--gold); border-radius: 16px;
   box-shadow: 0 0 25px rgba(255,183,3,0.7), 4px 4px 0 #000;
   padding: 14px 22px; display: flex; align-items: center; gap: 14px;
-  z-index: 10000; transition: top 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-  font-family: 'Press Start 2P', monospace;
+  z-index: 100000; transition: top 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  font-family: 'Press Start 2P', monospace; pointer-events: none;
 }
 #achieve-pop.show { top: 20px; }
 #achieve-pop .t1 { font-size: 9px; color: var(--gold); margin-bottom: 5px; }
@@ -216,17 +223,33 @@ main {
   background: var(--red); color: #fff; padding: 4px 8px; border-radius: 6px; margin-top: 6px;
 }
 
+/* ================= ИЗОЛИРОВАННЫЙ ЭКРАН ИГРЫ (FULLSCREEN APP) ================= */
 #game-section {
-  width: 100%; max-width: 500px; display: none; flex-direction: column; align-items: center;
-  animation: slideDown 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh; height: 100dvh;
+  z-index: 99998; background: rgba(5,5,10,0.96); backdrop-filter: blur(12px);
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  touch-action: none; -webkit-touch-callout: none;
+  padding: 10px;
 }
-@keyframes slideDown { from { transform: translateY(-40px); opacity: 0; } }
+
+.game-close-btn {
+  position: absolute; top: 12px; right: 12px; z-index: 1000;
+  background: #141420; border: 2px solid #fff; color: #fff;
+  font-family: 'Press Start 2P', monospace; font-size: 10px;
+  padding: 8px 12px; border-radius: 10px; cursor: pointer;
+  box-shadow: 2px 2px 0 #000;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.game-close-btn:active { transform: scale(0.95); }
 
 #game-wrap {
-  position: relative; width: 100%; height: 680px;
-  background: rgba(16, 16, 26, 0.95); border: 4px solid #fff; border-radius: 20px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.8), 8px 8px 0px var(--red); overflow: hidden;
+  position: relative; width: 100%; max-width: 480px; height: 92%; max-height: 700px;
+  background: rgba(16, 16, 26, 0.98); border: 4px solid #fff; border-radius: 20px;
+  box-shadow: 0 0 35px rgba(0,0,0,0.9), 6px 6px 0px var(--red);
+  overflow: hidden; touch-action: none;
 }
+
 canvas {
   display: block; width: 100%; height: 100%; image-rendering: pixelated;
   transition: filter 0.25s, transform 0.25s;
@@ -237,36 +260,43 @@ canvas.trip {
 }
 
 .hud {
-  position: absolute; top: 12px; left: 12px; right: 12px;
+  position: absolute; top: 10px; left: 10px; right: 10px;
   display: flex; justify-content: space-between; align-items: flex-start; z-index: 10;
   font-family: 'Press Start 2P', monospace; font-size: 9px; text-shadow: 2px 2px #000;
+  pointer-events: none;
 }
-.bars-wrap { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
-.bar-container { width: 120px; height: 12px; border: 2px solid #fff; background: #222; border-radius: 4px; overflow: hidden; }
+.bars-wrap { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
+.bar-container { width: 110px; height: 10px; border: 2px solid #fff; background: #222; border-radius: 4px; overflow: hidden; }
 #weight-fill { width: 65%; height: 100%; background: var(--yellow); transition: width 0.15s, background 0.2s; }
 #shield-fill { width: 0%; height: 100%; background: var(--gold); transition: width 0.1s; }
 
 .overlay {
-  position: absolute; inset: 0; background: rgba(5,5,8,0.92);
+  position: absolute; inset: 0; background: rgba(5,5,8,0.93);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  z-index: 20; text-align: center; padding: 24px;
+  z-index: 20; text-align: center; padding: 20px;
 }
 .overlay h2 {
-  font-family: 'Press Start 2P', monospace; font-size: 14px; color: var(--red);
-  margin-bottom: 14px; line-height: 1.6; text-shadow: 2px 2px #fff;
+  font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--red);
+  margin-bottom: 12px; line-height: 1.6; text-shadow: 2px 2px #fff;
 }
-.overlay p { font-size: 10px; line-height: 1.8; margin-bottom: 18px; color: #ccc; font-family: 'Press Start 2P', monospace; }
+.overlay p { font-size: 10px; line-height: 1.8; margin-bottom: 16px; color: #ccc; font-family: 'Press Start 2P', monospace; }
 
+/* ТАЧ-КНОПКИ: БОЛЬШИЕ, БЕЗ ВЫДЕЛЕНИЙ И МЕНЮ */
 .touch-ctl {
   position: absolute; bottom: 12px; left: 12px; right: 12px;
-  display: flex; justify-content: space-between; z-index: 10; pointer-events: none;
+  display: flex; justify-content: space-between; z-index: 15; pointer-events: none;
 }
 .t-btn {
-  width: 80px; height: 60px; background: rgba(255,255,255,0.18); border: 3px solid #fff;
-  color: #fff; font-family: 'Press Start 2P', monospace; font-size: 18px; border-radius: 12px;
-  pointer-events: auto; box-shadow: 3px 3px 0px #000;
+  width: 90px; height: 70px;
+  background: rgba(255,255,255,0.22); border: 3px solid #fff;
+  color: #fff; font-family: 'Press Start 2P', monospace; font-size: 22px; border-radius: 16px;
+  pointer-events: auto; box-shadow: 4px 4px 0px #000;
+  touch-action: none; -webkit-tap-highlight-color: transparent;
+  display: flex; align-items: center; justify-content: center;
 }
-.t-btn:active { background: rgba(255,23,68,0.6); transform: translateY(2px); }
+.t-btn.active, .t-btn:active {
+  background: rgba(255,23,68,0.7); transform: translateY(3px); box-shadow: 1px 1px 0px #000;
+}
 
 .dev-card {
   width: 100%; max-width: 640px;
@@ -395,37 +425,6 @@ canvas.trip {
     </button>
   </div>
 
-  <!-- ИГРА -->
-  <div id="game-section">
-    <div id="game-wrap">
-      <div class="hud">
-        <div>
-          СЧЁТ: <span id="score-val" style="color:var(--yellow)">0</span><br>
-          <span style="font-size:7px; color:#aaa;" id="speed-indicator">СКОРОСТЬ: 1.0x</span>
-        </div>
-        <div class="bars-wrap">
-          <div>ВЕС:<div class="bar-container"><div id="weight-fill"></div></div></div>
-          <div>ЗАЩИТА:<div class="bar-container"><div id="shield-fill"></div></div></div>
-        </div>
-      </div>
-
-      <canvas id="c" width="480" height="680"></canvas>
-
-      <div class="touch-ctl">
-        <button class="t-btn" id="b-left">◀</button>
-        <button class="t-btn" id="b-right">▶</button>
-      </div>
-
-      <div class="overlay" id="over-screen" style="display:none">
-        <h2 id="over-title">КОНЕЦ!</h2>
-        <p id="over-desc">...</p>
-        <p>СЧЁТ: <span id="final-score" style="color:var(--yellow)">0</span></p>
-        <button class="btn" id="restart-btn" style="margin-bottom:10px">ЕЩЁ РАЗ 🔄</button>
-        <a href="https://t.me/pokladishhh" target="_blank" class="btn gold" style="margin-bottom:8px">🍗 ПОРАДОВАТЬ ДАНИЛУ БАСКЕТОМ В ТГК</a>
-      </div>
-    </div>
-  </div>
-
   <div class="dev-card">
     <h3>🛠️ РАЗРАБОТКА И ПОДДЕРЖКА</h3>
     <p>
@@ -450,8 +449,41 @@ canvas.trip {
   </div>
 </main>
 
+<!-- ПОЛНОЭКРАННЫЙ ЭКРАН ИГРЫ -->
+<div id="game-section">
+  <button class="game-close-btn" id="btn-close-game">✕ ВЫХОД</button>
+
+  <div id="game-wrap">
+    <div class="hud">
+      <div>
+        СЧЁТ: <span id="score-val" style="color:var(--yellow)">0</span><br>
+        <span style="font-size:7px; color:#aaa;" id="speed-indicator">СКОРОСТЬ: 1.0x</span>
+      </div>
+      <div class="bars-wrap">
+        <div>ВЕС:<div class="bar-container"><div id="weight-fill"></div></div></div>
+        <div>ЗАЩИТА:<div class="bar-container"><div id="shield-fill"></div></div></div>
+      </div>
+    </div>
+
+    <canvas id="c" width="480" height="680"></canvas>
+
+    <div class="touch-ctl">
+      <button class="t-btn" id="b-left">◀</button>
+      <button class="t-btn" id="b-right">▶</button>
+    </div>
+
+    <div class="overlay" id="over-screen" style="display:none">
+      <h2 id="over-title">КОНЕЦ!</h2>
+      <p id="over-desc">...</p>
+      <p>СЧЁТ: <span id="final-score" style="color:var(--yellow)">0</span></p>
+      <button class="btn" id="restart-btn" style="margin-bottom:10px">ЕЩЁ РАЗ 🔄</button>
+      <a href="https://t.me/pokladishhh" target="_blank" class="btn gold" style="margin-bottom:8px">🍗 ПОРАДОВАТЬ ДАНИЛУ БАСКЕТОМ В ТГК</a>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ================= 1. ФОНОВАЯ МУЗЫКА (SHUFFLE sound1-sound7) ================= */
+/* ================= 1. ФОНОВАЯ МУЗЫКА ================= */
 const BG_TRACKS = [
   "music/sound1.mp3", "music/sound2.mp3", "music/sound3.mp3",
   "music/sound4.mp3", "music/sound5.mp3", "music/sound6.mp3", "music/sound7.mp3"
@@ -524,6 +556,7 @@ const SFX = {
 /* ================= 4. ФЕЙСКОНТРОЛЬ И ДИСКЛЕЙМЕР ================= */
 const gateModal = document.getElementById('gate-modal');
 const rulesModal = document.getElementById('rules-modal');
+const gameSection = document.getElementById('game-section');
 let currentNick = localStorage.getItem('sphynx_nick') || 'Первокурсник';
 
 function closeSite() {
@@ -567,11 +600,22 @@ document.getElementById('btn-show-rules').onclick = () => {
   }, 1000);
 };
 
+/* ОТКРЫТИЕ ИГРЫ В ИЗОЛИРОВАННОМ ОКНЕ */
 document.getElementById('btn-love-sphynx').onclick = () => {
   rulesModal.style.display = 'none';
-  document.getElementById('game-section').style.display = 'flex';
-  document.getElementById('game-section').scrollIntoView({ behavior: 'smooth' });
+  gameSection.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
   if (!running && !gameOver) resetGame();
+};
+
+/* ЗАКРЫТИЕ ИГРЫ И ВОЗВРАТ НА САЙТ */
+document.getElementById('btn-close-game').onclick = () => {
+  gameSection.style.display = 'none';
+  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
+  running = false;
+  clearInterval(timerInterval);
 };
 
 let tapCount = 0, tapTimer;
@@ -651,7 +695,6 @@ function saveRecord(newScore) {
   });
 }
 
-// Слушатель базы в реальном времени
 leaderboardsRef.on('value', snapshot => {
   const data = snapshot.val();
   const list = [];
@@ -722,10 +765,38 @@ const DROP_TYPES = [
 const keys = { left: false, right: false };
 window.onkeydown = e => { if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true; if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true; };
 window.onkeyup = e => { if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false; if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false; };
-document.getElementById('b-left').onpointerdown = () => keys.left = true;
-document.getElementById('b-left').onpointerup = () => keys.left = false;
-document.getElementById('b-right').onpointerdown = () => keys.right = true;
-document.getElementById('b-right').onpointerup = () => keys.right = false;
+
+/* НАСТРОЙКА СЕНСОРНЫХ КНОПОК БЕЗ ПАРАЗИТНЫХ ЖЕСТОВ */
+function setupButton(btnId, keyProp) {
+  const btn = document.getElementById(btnId);
+  const start = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    keys[keyProp] = true;
+    btn.classList.add('active');
+  };
+  const end = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    keys[keyProp] = false;
+    btn.classList.remove('active');
+  };
+
+  btn.addEventListener('touchstart', start, { passive: false });
+  btn.addEventListener('touchend', end, { passive: false });
+  btn.addEventListener('touchcancel', end, { passive: false });
+
+  btn.addEventListener('mousedown', start);
+  btn.addEventListener('mouseup', end);
+  btn.addEventListener('mouseleave', end);
+}
+setupButton('b-left', 'left');
+setupButton('b-right', 'right');
+
+// Запрет свайпов и масштабирования окна внутри игры
+document.getElementById('game-wrap').addEventListener('touchmove', (e) => {
+  e.preventDefault();
+}, { passive: false });
 
 function pickRandomDrop() {
   const totalW = DROP_TYPES.reduce((a,b) => a + b.w, 0);
@@ -930,7 +1001,7 @@ function draw() {
 function endGame(title, desc) {
   gameOver = true; running = false;
   clearInterval(timerInterval); canvas.classList.remove('trip');
-  saveRecord(score); // Запись в Firebase!
+  saveRecord(score);
   document.getElementById('over-title').textContent = title;
   document.getElementById('over-desc').textContent = desc;
   document.getElementById('final-score').textContent = score;
