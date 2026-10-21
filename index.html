@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>ИГРА ПАПКИ v2.0 🍗</title>
+<title>ИГРА ПАПКИ v2.1 🍗</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍗</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@700;900&display=swap" rel="stylesheet">
 
@@ -80,16 +80,16 @@ body {
 .gate-box {
   background: #141420; border: 4px solid var(--theme-glow);
   box-shadow: 0 0 35px var(--theme-glow), 8px 8px 0px #fff;
-  border-radius: 20px; padding: 26px 20px; max-width: 540px; width: 100%;
+  border-radius: 20px; padding: 24px 18px; max-width: 540px; width: 100%;
   text-align: center; max-height: 85vh; overflow-y: auto;
 }
 .gate-box h2 {
   font-family: 'Press Start 2P', monospace;
   font-size: clamp(12px, 3.8vw, 15px); line-height: 1.6; color: var(--yellow);
-  margin-bottom: 18px; text-shadow: 3px 3px 0px #000;
+  margin-bottom: 16px; text-shadow: 3px 3px 0px #000;
 }
 .gate-box p {
-  font-size: 13px; line-height: 1.6; color: #ddd; margin-bottom: 18px; text-align: left;
+  font-size: 12px; line-height: 1.6; color: #ddd; margin-bottom: 16px; text-align: left;
 }
 
 .btn {
@@ -116,17 +116,27 @@ input.nick-input {
   -webkit-user-select: auto; user-select: auto;
 }
 
-.diff-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px;
+/* СЕТКА СЛОЖНОСТЕЙ */
+.diff-list {
+  display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; text-align: left;
 }
-.diff-btn {
-  font-family: 'Press Start 2P', monospace; font-size: 9px; padding: 12px 8px;
-  border: 2px solid #555; border-radius: 10px; background: #11111c; color: #aaa;
-  cursor: pointer; text-align: center; line-height: 1.4;
+.diff-card {
+  border: 2px solid #444; border-radius: 12px; background: #10101a; padding: 12px;
+  cursor: pointer; transition: all 0.2s ease;
 }
-.diff-btn.active {
-  border-color: var(--gold); background: #2a220a; color: var(--yellow);
-  box-shadow: 0 0 12px rgba(255,183,3,0.5);
+.diff-card.active {
+  border-color: var(--gold); background: #241c08; box-shadow: 0 0 14px rgba(255,183,3,0.4);
+}
+.diff-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
+  font-family: 'Press Start 2P'; font-size: 10px; color: #fff;
+}
+.diff-card.active .diff-header { color: var(--yellow); }
+.diff-mult {
+  font-size: 8px; color: var(--gold); background: #000; padding: 3px 6px; border-radius: 6px; border: 1px solid var(--gold);
+}
+.diff-desc {
+  font-size: 11px; line-height: 1.4; color: #aaa;
 }
 
 .theme-picker-wrap {
@@ -397,7 +407,7 @@ canvas.trip {
 <body>
 
 <div id="boot-screen">
-  <div class="boot-title">ИГРА ПАПКИ<br><span style="font-size:12px;color:var(--red)">v2.0 MASTER EDITION</span></div>
+  <div class="boot-title">ИГРА ПАПКИ<br><span style="font-size:12px;color:var(--red)">v2.1 ADVANCED EDITION</span></div>
   <div class="boot-bar-box"><div id="boot-bar-fill"></div></div>
   <div id="boot-log">Инициализация биоса общаги...</div>
   <button class="btn gold" id="btn-boot-start" style="display:none">ВОЙТИ В ИГРУ 🍗</button>
@@ -466,7 +476,7 @@ canvas.trip {
         <li>🌌 <b>Секретная концовка:</b> выжить 180+ сек и набрать 10 000+ очков!</li>
       </ul>
       <h3>🦁 4. БАТИН РЫК</h3>
-      <p>Кнопка <b>🦁 РЫК</b> взрывает все бомбы на экране ударной волной. Кулдаун — 20 секунд.</p>
+      <p>Кнопка <b>🦁 РЫК</b> уничтожает все бомбы на экране ударной волной. Кулдаун — 20 секунд.</p>
     </div>
     <button class="btn gold" id="btn-close-laws" style="width:100%; margin-top:16px">УСВОИЛ, ПАПКА! 🤝</button>
   </div>
@@ -477,40 +487,61 @@ canvas.trip {
   <div class="gate-box" style="max-width:560px">
     <h2>📜 ХРОНИКИ ПАПКИ (ПАТЧ-НОУТЫ)</h2>
     <div class="laws-content">
-      <h3>🔥 v2.0 MASTER EDITION</h3>
+      <h3>🔥 v2.1 ADVANCED EDITION</h3>
       <ul>
-        <li>• 4 уровня сложности с раздельными онлайн-лидербордами Firebase.</li>
+        <li>• 4 честных уровня сложности: Легкий, Средний, Хард, День со Сфинксом с реальным ускорением до 3.5x!</li>
+        <li>• Раздельные онлайн-таблицы лидеров Firebase для каждого режима.</li>
+        <li>• Подробные описания правил и множителей для каждого режима.</li>
         <li>• 100 сюжетных дилемм с прямым описанием эффектов на кнопках.</li>
-        <li>• Анимированные концовки на Canvas (Инцел, Спортсмен, Свадьба в Колоске, Полубог).</li>
-        <li>• Фикс сигаретного спама (кулдаун 20 сек) и механика тяжелой инерции вместо зависания.</li>
+        <li>• Анимированные концовки на Canvas и фикс спавна сигарет.</li>
       </ul>
-      <h3>⚡ v1.5 – v1.6</h3>
+      <h3>⚡ v1.5 – v2.0</h3>
       <ul>
-        <li>• Добавлен арт ночного Ростикса IMG_7247.jpeg для кат-сцен.</li>
-        <li>• Кат-сцены отвязаны от счета и выпадают рандомно раз в 30–120 секунд.</li>
-      </ul>
-      <h3>🍗 v1.0 – v1.4</h3>
-      <ul>
-        <li>• Бутлоадер, живые голосовые Данилы, генератор диплома и онлайн-лидерборд.</li>
+        <li>• Добавлен арт IMG_7247.jpeg для кат-сцен, мобильное превью диплома, новые войсы Данилы.</li>
       </ul>
     </div>
     <button class="btn gold" id="btn-close-patch" style="width:100%; margin-top:16px">ЗАКРЫТЬ 🤝</button>
   </div>
 </div>
 
-<!-- ДИСКЛЕЙМЕР И ВЫБОР СЛОЖНОСТИ -->
+<!-- ВЫБОР СЛОЖНОСТИ С ПОЛНЫМ ОПИСАНИЕМ -->
 <div class="modal-overlay" id="rules-modal" style="display:none">
   <div class="gate-box">
     <h2>⚔️ ВЫБЕРИ СЛОЖНОСТЬ</h2>
-    <div class="diff-grid">
-      <div class="diff-btn active" data-diff="easy">1. ЧИЛЛ<br><span style="font-size:7px;color:#aaa">Множитель x1.0</span></div>
-      <div class="diff-btn" data-diff="medium">2. СЕССИЯ<br><span style="font-size:7px;color:#aaa">Множитель x1.5</span></div>
-      <div class="diff-btn" data-diff="hard">3. САРАТОВ<br><span style="font-size:7px;color:#aaa">Множитель x2.5</span></div>
-      <div class="diff-btn" data-diff="papka_intimate">4. С ПАПКОЙ 🕯️<br><span style="font-size:7px;color:var(--yellow)">Множитель x5.0</span></div>
+    <div class="diff-list">
+      <div class="diff-card active" data-diff="easy">
+        <div class="diff-header">
+          <span>1. ЛЕГКИЙ</span>
+          <span class="diff-mult">ОЧКИ x1.0</span>
+        </div>
+        <div class="diff-desc">Студент на чилле. Еда падает не спеша, бомбы редкие, ЗОЖ спасает от зажора.</div>
+      </div>
+
+      <div class="diff-card" data-diff="medium">
+        <div class="diff-header">
+          <span>2. СРЕДНИЙ</span>
+          <span class="diff-mult">ОЧКИ x1.5</span>
+        </div>
+        <div class="diff-desc">Сессия близко. Базовая скорость x1.6, времени на реакцию меньше, бомбы летят кучнее.</div>
+      </div>
+
+      <div class="diff-card" data-diff="hard">
+        <div class="diff-header">
+          <span>3. ХАРД</span>
+          <span class="diff-mult">ОЧКИ x2.5</span>
+        </div>
+        <div class="diff-desc">Голодный Саратов. Скорость x2.4 со старта, шквальный дождь из баскетов и взрывчатки.</div>
+      </div>
+
+      <div class="diff-card" data-diff="sphynx_day">
+        <div class="diff-header">
+          <span>4. ДЕНЬ СО СФИНКСОМ 🕯️</span>
+          <span class="diff-mult">ОЧКИ x5.0</span>
+        </div>
+        <div class="diff-desc">Выживание с Папкой. Скорость x3.5, двойной перевес, бомбы парами. Для избранных легенд!</div>
+      </div>
     </div>
-    <p style="font-size:11px;line-height:1.6;margin-bottom:14px;color:#bbb">
-      Игра создана с любовью и уважением к Даниле. Лови крылья, держи баланс и попади в топ выбранной сложности!
-    </p>
+
     <button class="btn pink" id="btn-love-sphynx" disabled style="width:100%">
       Мы все любим сфинкса❤️ (3)
     </button>
@@ -532,7 +563,7 @@ canvas.trip {
 <main>
   <div class="profile-card">
     <div>
-      <span class="beta-badge">🔥 ИГРА ПАПКИ v2.0 🔥</span>
+      <span class="beta-badge">🔥 ИГРА ПАПКИ v2.1 🔥</span>
     </div>
 
     <div class="mc-splash-wrap">
@@ -589,10 +620,10 @@ canvas.trip {
   <div class="leaderboard-card">
     <h2 style="font-family:'Press Start 2P';font-size:12px;color:var(--gold);margin-bottom:12px;">🏆 ДОСКА ПОЧЁТА ПАПКИ (ОНЛАЙН)</h2>
     <div class="lead-tabs">
-      <button class="lead-tab-btn active" data-tab="easy">ЧИЛЛ</button>
-      <button class="lead-tab-btn" data-tab="medium">СЕССИЯ</button>
-      <button class="lead-tab-btn" data-tab="hard">САРАТОВ</button>
-      <button class="lead-tab-btn" data-tab="papka_intimate">С ПАПКОЙ 🕯️</button>
+      <button class="lead-tab-btn active" data-tab="easy">ЛЕГКИЙ</button>
+      <button class="lead-tab-btn" data-tab="medium">СРЕДНИЙ</button>
+      <button class="lead-tab-btn" data-tab="hard">ХАРД</button>
+      <button class="lead-tab-btn" data-tab="sphynx_day">ДЕНЬ СО СФИНКСОМ 🕯️</button>
     </div>
     <ul class="lead-list" id="lead-container">
       <li class="lead-item"><span>Загрузка рекордов...</span></li>
@@ -812,20 +843,56 @@ const SFX = {
   kiss() { playTone(880, 'sine', 0.15, 0.2); setTimeout(() => playTone(1200, 'triangle', 0.2, 0.25), 80); }
 };
 
-/* ================= 6. СЛОЖНОСТЬ И ФЕЙСКОНТРОЛЬ ================= */
+/* ================= 6. 4 РЕАЛЬНЫХ УРОВНЯ СЛОЖНОСТИ ================= */
 let selectedDifficulty = 'easy';
 const DIFFICULTY_CONFIG = {
-  easy: { name: 'Чилл', scoreMult: 1.0, bombChance: 0.10, speedMult: 1.0, foodWeightMult: 1.0 },
-  medium: { name: 'Сессия', scoreMult: 1.5, bombChance: 0.15, speedMult: 1.25, foodWeightMult: 1.2 },
-  hard: { name: 'Саратов', scoreMult: 2.5, bombChance: 0.22, speedMult: 1.45, foodWeightMult: 1.4 },
-  papka_intimate: { name: 'С Папкой 🕯️', scoreMult: 5.0, bombChance: 0.30, speedMult: 1.70, foodWeightMult: 1.8 }
+  easy: {
+    name: 'Легкий',
+    scoreMult: 1.0,
+    baseFallSpeed: 1.0,
+    speedStep: 1.15,
+    speedInterval: 60,
+    bombChance: 0.08,
+    spawnRate: 85,
+    foodWeightMult: 1.0
+  },
+  medium: {
+    name: 'Средний',
+    scoreMult: 1.5,
+    baseFallSpeed: 1.6,
+    speedStep: 1.25,
+    speedInterval: 45,
+    bombChance: 0.16,
+    spawnRate: 65,
+    foodWeightMult: 1.25
+  },
+  hard: {
+    name: 'Хард',
+    scoreMult: 2.5,
+    baseFallSpeed: 2.4,
+    speedStep: 1.35,
+    speedInterval: 30,
+    bombChance: 0.25,
+    spawnRate: 46,
+    foodWeightMult: 1.5
+  },
+  sphynx_day: {
+    name: 'День со Сфинксом',
+    scoreMult: 5.0,
+    baseFallSpeed: 3.5, // Экстремальный старт
+    speedStep: 1.45,
+    speedInterval: 25,
+    bombChance: 0.35, // Бомбы летят стеной
+    spawnRate: 34,
+    foodWeightMult: 2.0 // Двойной вес за еду!
+  }
 };
 
-document.querySelectorAll('.diff-btn').forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedDifficulty = btn.getAttribute('data-diff');
+document.querySelectorAll('.diff-card').forEach(card => {
+  card.onclick = () => {
+    document.querySelectorAll('.diff-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    selectedDifficulty = card.getAttribute('data-diff');
   };
 });
 
@@ -998,14 +1065,11 @@ loadLeaderboard('easy');
 
 /* ================= 9. 100 СУДЬБОНОСНЫХ ДИЛЕММ ================= */
 const DILEMMAS = [
-  // 1-5: НОВЫЕ БАЗОВЫЕ КАТ-СЦЕНЫ
   { t: "ГРЯЗНУЛЬКИ В ПОДДОНЕ", q: "В общажном душе обнаружен подозрительный налёт.", b1: "ДАТЬ КЛЫКА (-20 КГ)", b2: "ЗАИНЦЕЛИТЬ (БЕЗ ИЗМЕНЕНИЙ)", a1: () => { weight = Math.max(0, weight - 20); }, a2: () => {} },
   { t: "ПЕРЕЕЗД В КОЛОСОК", q: "Вика зовёт бросить суету и осесть в СНТ Колосок.", b1: "ЖЕНИТЬСЯ НА ВИКЕ (СВАДЬБА)", b2: "ОТКАЗАТЬСЯ (БИТВА ДАЛЬШЕ)", a1: () => { triggerWeddingEnding(); }, a2: () => {} },
   { t: "СИТУАЦИЯ В ДАЙВИНЧИКЕ", q: "Анкета: «Ищу папика на суете с крылышками».", b1: "ДАТЬ КЛЫКА (-5 КГ, +50 PTS)", b2: "КИНУТЬ В ЧС (+5 КГ)", a1: () => { weight = Math.max(0, weight - 5); score += 50; }, a2: () => { weight = Math.min(200, weight + 5); } },
   { t: "ОТКРЫТЫЙ ЛЮК НА ДАЧНОЙ", q: "Под сугробом зияет открытый колодец теплотрассы!", b1: "ПРОВАЛИТЬСЯ ПОЛНОСТЬЮ (КОНЕЦ)", b2: "ПРОВАЛИТЬСЯ ОДНОЙ НОГОЙ (-50 КГ)", a1: () => { endGame("КАТАКОМБЫ САРАТОВА 🕳️", "Сфинкс ушёл на дно коммунального ада."); }, a2: () => { weight = Math.max(0, weight - 50); } },
   { t: "АКЦИЯ В МАКЕ", q: "Купон на чизбургер за 39₽ горит в приложении.", b1: "ВЗЯТЬ ЧИЗ (+10 КГ)", b2: "ОТКАЗАТЬСЯ ГОРДО (+10 PTS)", a1: () => { weight = Math.min(200, weight + 10); }, a2: () => { score += 10; } },
-
-  // 6-10: БРАТВА И ПЛОЙКА
   { t: "ЛЁХА ГАЙДА В ИГРОВУХЕ", q: "Лёха Гайда зовёт зарубиться в ночной пакет на VIP.", b1: "ВЗЯТЬ ЭНЕРГЕТИК (SLOW-MO, +80 PTS)", b2: "ПОЙТИ СПАТЬ (-10 КГ)", a1: () => { slowMoTimer = 300; score += 80; }, a2: () => { weight = Math.max(0, weight - 10); } },
   { t: "ЛЁХА ВОСТР НА ТАЧКЕ", q: "Востр подъехал с предложением прокатиться боком.", b1: "ПРЫГНУТЬ (СКОРОСТЬ x1.3, ОЧИСТКА)", b2: "«ТОРМОЗИ, ВОСТР» (ЩИТ)", a1: () => { speedMultiplier *= 1.3; drops.length = 0; }, a2: () => { shieldTimer = 300; } },
   { t: "СУРЕН АРМЯН И ШАШЛЫК", q: "Сурен снимает парной шашлык с мангала прямо в лаваш.", b1: "ЗАТОЧИТЬ С ЛАВАШОМ (+30 КГ, ЯРОСТЬ)", b2: "ВЕЖЛИВО ОТКАЗАТЬСЯ (БОМБЫ)", a1: () => { weight = Math.min(200, weight + 30); rageTimer = 300; }, a2: () => { spawnDrop(); spawnDrop(); } },
@@ -1013,7 +1077,6 @@ const DILEMMAS = [
   { t: "ДИМАН И АРХИВЫ", q: "Диман принёс секретную флешку с угарами 2021 года.", b1: "ЗАЛИТЬ В ТГК (COMBO x5, +150 PTS)", b2: "УДАЛИТЬ (ЩИТ НА 6 СЕК)", a1: () => { comboMultiplier = 5; score += 150; }, a2: () => { shieldTimer = 360; } }
 ];
 
-// Автозаполнение до 100 сбалансированных мемных дилемм
 const THEMES_POOL = [
   { t: "МАРИНКА И ТАБЛЕТКИ", q: "Маринка предлагает новые цветные витамины.", b1: "ВЫПИТЬ (ЯРОСТЬ, -10 КГ)", b2: "СПРЯТАТЬ В КАРМАН (+40 PTS)", a1: () => { rageTimer = 250; weight = Math.max(0, weight - 10); }, a2: () => { score += 40; } },
   { t: "ЕВА-ЕВА В СЕТИ", q: "Ева-Ева выложила грустную цитату со ссылкой на Сфинкса.", b1: "НАПИСАТЬ «ПОШЛИ НА ХУЙ» (ОЧИСТКА)", b2: "ОТПРАВИТЬ СТИКЕР (ТРИП)", a1: () => { drops.length = 0; VOICE.bomb(); }, a2: () => { tripTimer = 250; } },
@@ -1098,7 +1161,7 @@ let slowMoTimer = 0, rageTimer = 0, tripTimer = 0;
 let gameOver = false, running = false, gameSeconds = 0, speedMultiplier = 1.0;
 let timerInterval = null, vegeStreak = 0;
 
-let lastSmokeTime = -999; // Кулдаун 20с на сигареты
+let lastSmokeTime = -999;
 let comboCount = 0, comboMultiplier = 1;
 let roarCooldown = 0;
 const ROAR_MAX_COOLDOWN = 20;
@@ -1107,7 +1170,6 @@ let activeEvent = null, eventTimer = 0;
 let screenShake = 0;
 let shockwaves = [];
 
-// Анимационные параметры концовок
 let cutsceneType = null;
 let cutsceneTimer = 0;
 let tearParticles = [];
@@ -1183,9 +1245,7 @@ function pickRandomDrop() {
   if (activeEvent === 'kfc_raid') return Math.random() < 0.6 ? DROP_TYPES[0] : DROP_TYPES[4];
   if (activeEvent === 'smoke_hour') return Math.random() < 0.7 ? DROP_TYPES[10] : DROP_TYPES[12];
   
-  // Кулдаун 20 секунд на сигареты
   const allowSmoke = (gameSeconds - lastSmokeTime) >= 20;
-
   let pool = DROP_TYPES.filter(d => {
     if ((d.t === 'marlboro' || d.t === 'philip') && !allowSmoke) return false;
     return true;
@@ -1239,14 +1299,13 @@ function update() {
     canvas.classList.remove('trip');
   }
 
-  // Плавная тяжелая инерция вместо застревания
   let targetSpeed = 7.0;
   if (weight <= 40) targetSpeed = 9.8;
   else if (weight <= 100) targetSpeed = 7.6;
   else if (weight <= 155) targetSpeed = 5.2;
   else if (weight <= 185) targetSpeed = 3.6;
   else {
-    targetSpeed = 2.0; // Тяжелый танк
+    targetSpeed = 2.0;
     triggerAchievement('giant_mode');
     if (Math.random() < 0.08) screenShake = 4;
   }
@@ -1262,14 +1321,16 @@ function update() {
   if (Math.abs(player.vx) > 0.5) player.stepAnim += 0.22;
 
   spawnTick++;
-  const baseRate = Math.max(34, Math.floor(82 / (speedMultiplier * DIFFICULTY_CONFIG[selectedDifficulty].speedMult)));
-  const effectiveRate = slowMoTimer > 0 ? baseRate * 2.2 : (activeEvent ? Math.floor(baseRate * 0.6) : baseRate);
+  const cfg = DIFFICULTY_CONFIG[selectedDifficulty];
+  const dynamicRate = Math.max(20, Math.floor(cfg.spawnRate / speedMultiplier));
+  const effectiveRate = slowMoTimer > 0 ? dynamicRate * 2.2 : (activeEvent ? Math.floor(dynamicRate * 0.6) : dynamicRate);
   if (spawnTick % effectiveRate === 0) spawnDrop();
 
   const timeDilation = slowMoTimer > 0 ? 0.35 : 1.0;
   for (let i = drops.length - 1; i >= 0; i--) {
     const d = drops[i];
-    d.y += d.baseSpeed * speedMultiplier * timeDilation * DIFFICULTY_CONFIG[selectedDifficulty].speedMult;
+    // ЖЕСТКОЕ УСКОРЕНИЕ ПАДЕНИЯ В ЗАВИСИМОСТИ ОТ РЕЖИМА
+    d.y += d.baseSpeed * speedMultiplier * timeDilation * cfg.baseFallSpeed;
     if (d.meta.t === 'punch' && Math.random() > 0.4) addSparkle(d.x, d.y, '#ffd23f');
     if (d.meta.t === 'freshman' && Math.random() > 0.4) addSparkle(d.x, d.y, '#ff4081');
 
@@ -1297,7 +1358,6 @@ function update() {
     if (p.life <= 0) particles.splice(i, 1);
   }
 
-  // ПРОВЕРКА КОНЦОВОК
   if (weight >= MAX_WEIGHT) {
     triggerAchievement('end_fat');
     startCutscene('incel');
@@ -1309,7 +1369,6 @@ function update() {
     return;
   }
 
-  // СЕКРЕТНАЯ КОНЦОВКА (Время >= 180s и Счет >= 10000)
   if (gameSeconds >= 180 && score >= 10000) {
     startCutscene('god');
     return;
@@ -1404,7 +1463,6 @@ function startCutscene(type) {
 function updateCutscene() {
   cutsceneTimer++;
   if (cutsceneType === 'incel') {
-    // Процедурные пиксельные слёзы
     if (cutsceneTimer % 3 === 0) {
       tearParticles.push({ x: 230 + (Math.random()-0.5)*20, y: 320, vy: 3 + Math.random()*2, life: 40 });
     }
@@ -1442,7 +1500,6 @@ function draw() {
   ctx.fillStyle = '#171724'; ctx.fillRect(0, FLOOR_Y, canvas.width, canvas.height - FLOOR_Y);
   ctx.fillStyle = currentTheme; ctx.fillRect(0, FLOOR_Y, canvas.width, 3);
 
-  // ОТРИСОВКА КАТ-СЦЕН
   if (cutsceneType) {
     if (cutsceneType === 'incel') {
       ctx.fillStyle = 'rgba(10,10,18,0.85)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1489,7 +1546,6 @@ function draw() {
     return;
   }
 
-  // ОБЫЧНАЯ ИГРА
   drops.forEach(d => {
     ctx.font = '28px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(d.meta.e, d.x, d.y);
     if (d.meta.t === 'punch') {
@@ -1571,8 +1627,10 @@ function resetGame() {
   document.getElementById('game-wrap').classList.remove('event-active');
   document.getElementById('event-banner').style.display = 'none';
   player.x = (canvas.width - player.w) / 2; player.vx = 0; gameSeconds = 0;
+
+  const cfg = DIFFICULTY_CONFIG[selectedDifficulty];
   speedMultiplier = 1.0;
-  document.getElementById('speed-indicator').textContent = 'СКОР: 1.0x';
+  document.getElementById('speed-indicator').textContent = `СКОР: ${(cfg.baseFallSpeed).toFixed(1)}x`;
   document.getElementById('combo-indicator').textContent = 'COMBO: x1';
 
   clearInterval(timerInterval);
@@ -1591,9 +1649,12 @@ function resetGame() {
       if (roarCooldown === 0) { roarBtn.disabled = false; roarTxt.textContent = 'РЫК'; }
     }
 
-    if (gameSeconds % 60 === 0) {
-      speedMultiplier = +(speedMultiplier * 1.25).toFixed(2);
-      document.getElementById('speed-indicator').textContent = `СКОР: ${speedMultiplier}x`;
+    // ДИНАМИЧЕСКИЙ РАЗГОН ПО ИНТЕРВАЛАМ СЛОЖНОСТИ
+    if (gameSeconds % cfg.speedInterval === 0) {
+      speedMultiplier = +(speedMultiplier * cfg.speedStep).toFixed(2);
+      const totalSpeed = (speedMultiplier * cfg.baseFallSpeed).toFixed(1);
+      document.getElementById('speed-indicator').textContent = `СКОР: ${totalSpeed}x`;
+      showTitlePop(`СКОРОСТЬ x${totalSpeed}! 🔥`);
     }
 
     if (gameSeconds > 0 && gameSeconds % 50 === 0 && !activeEvent) {
