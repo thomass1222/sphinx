@@ -19,6 +19,7 @@
   --pink: #ff4081;
   --mc-yellow: #ffff55;
   --bg: #0b0b12;
+  --theme-glow: #ff1744;
 }
 * {
   box-sizing: border-box; margin: 0; padding: 0;
@@ -34,12 +35,14 @@ body {
 #bg-layer {
   position: fixed; inset: 0; z-index: -2;
   background: url('fon.png') center/cover no-repeat;
-  filter: blur(25px) brightness(0.35) saturate(1.3);
+  filter: blur(28px) brightness(0.32) saturate(1.4);
   transform: scale(1.15);
 }
 #bg-overlay {
   position: fixed; inset: 0; z-index: -1;
-  background: radial-gradient(circle, rgba(255,23,68,0.18) 0%, rgba(11,11,18,0.9) 75%);
+  background: radial-gradient(circle, var(--theme-glow) 0%, rgba(11,11,18,0.92) 75%);
+  opacity: 0.35;
+  transition: background 0.5s ease;
 }
 
 /* МОДАЛКИ */
@@ -47,37 +50,32 @@ body {
   position: fixed; inset: 0; z-index: 9999;
   background: rgba(5,5,8,0.94); backdrop-filter: blur(14px);
   display: flex; align-items: center; justify-content: center; padding: 20px;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
 }
 .modal-overlay.hide { opacity: 0; visibility: hidden; pointer-events: none; }
 
 .gate-box {
-  background: #141420; border: 4px solid var(--red);
-  box-shadow: 0 0 35px rgba(255,23,68,0.6), 8px 8px 0px #fff;
-  border-radius: 20px; padding: 30px 22px; max-width: 480px; width: 100%;
-  text-align: center; animation: floatGate 3.5s ease-in-out infinite alternate;
-}
-@keyframes floatGate {
-  0% { transform: translateY(0px) rotate(-0.5deg); }
-  100% { transform: translateY(-8px) rotate(0.5deg); }
+  background: #141420; border: 4px solid var(--theme-glow);
+  box-shadow: 0 0 35px var(--theme-glow), 8px 8px 0px #fff;
+  border-radius: 20px; padding: 26px 20px; max-width: 520px; width: 100%;
+  text-align: center; max-height: 85vh; overflow-y: auto;
 }
 .gate-box h2 {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(12px, 3.8vw, 16px); line-height: 1.6; color: var(--yellow);
-  margin-bottom: 20px; text-shadow: 3px 3px 0px #000;
+  font-size: clamp(12px, 3.8vw, 15px); line-height: 1.6; color: var(--yellow);
+  margin-bottom: 18px; text-shadow: 3px 3px 0px #000;
 }
 .gate-box p {
-  font-size: 13px; line-height: 1.6; color: #ddd; margin-bottom: 20px; text-align: left;
+  font-size: 13px; line-height: 1.6; color: #ddd; margin-bottom: 18px; text-align: left;
 }
 
 .btn {
   font-family: 'Press Start 2P', monospace; font-size: 11px;
-  padding: 13px 20px; cursor: pointer; border: 3px solid #fff;
+  padding: 13px 18px; cursor: pointer; border: 3px solid #fff;
   border-radius: 12px; background: var(--red); color: #fff;
   box-shadow: 4px 4px 0px #000; transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
   text-decoration: none; display: inline-block; text-align: center;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
 .btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px #000; }
 .btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0px #000; }
@@ -86,6 +84,7 @@ body {
 .btn.gold { background: var(--gold); color: #000; }
 .btn.pink { background: var(--pink); border-color: #fff; color: #fff; }
 .btn.tg { background: #229ED9; border-color: #fff; color: #fff; }
+.btn.green { background: #00c853; color: #000; }
 
 input.nick-input {
   width: 100%; padding: 14px; font-family: 'Press Start 2P', monospace;
@@ -94,33 +93,39 @@ input.nick-input {
   -webkit-user-select: auto; user-select: auto;
 }
 
-/* MINECRAFT СПЛЕШ И БЕТА ТЕСТ */
+/* ПАЛИТРА ТЕМЫ (9 ЦВЕТОВ) */
+.theme-picker-wrap {
+  margin: 18px 0; background: #101018; border: 2px solid #333; border-radius: 14px; padding: 12px;
+}
+.theme-title {
+  font-family: 'Press Start 2P'; font-size: 8px; color: #aaa; margin-bottom: 10px;
+}
+.theme-dots {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+}
+.t-dot {
+  width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff;
+  cursor: pointer; transition: transform 0.15s, border-color 0.15s;
+}
+.t-dot.active { transform: scale(1.25); border-color: #fff; box-shadow: 0 0 10px #fff; }
+
+/* MINECRAFT СПЛЕШ */
 .beta-badge {
   display: inline-block; background: var(--red); color: #fff;
-  font-family: 'Press Start 2P', monospace; font-size: 13px;
+  font-family: 'Press Start 2P', monospace; font-size: 12px;
   padding: 6px 14px; border-radius: 8px; border: 3px solid #fff;
   box-shadow: 0 0 15px rgba(255,23,68,0.8), 3px 3px 0 #000;
   margin-bottom: 14px;
-  animation: pulseBeta 1s ease-in-out infinite alternate;
 }
-@keyframes pulseBeta {
-  0% { transform: scale(1); filter: brightness(1); }
-  100% { transform: scale(1.08); filter: brightness(1.2); }
-}
-
 .mc-splash-wrap {
   position: relative; width: 100%; min-height: 48px; margin-bottom: 14px;
 }
 .mc-splash {
   position: absolute; right: 8%; top: 0;
-  font-family: 'Press Start 2P', monospace;
-  font-size: clamp(10px, 3.2vw, 13px);
-  color: var(--mc-yellow);
-  text-shadow: 3px 3px 0px #3f3f00, 4px 4px 0px #000;
-  transform: rotate(-14deg);
-  animation: mcPulse 0.5s ease-in-out infinite alternate;
-  pointer-events: auto; cursor: pointer;
-  white-space: nowrap;
+  font-family: 'Press Start 2P', monospace; font-size: clamp(9px, 3.2vw, 12px);
+  color: var(--mc-yellow); text-shadow: 3px 3px 0px #3f3f00, 4px 4px 0px #000;
+  transform: rotate(-14deg); animation: mcPulse 0.5s ease-in-out infinite alternate;
+  cursor: pointer; white-space: nowrap;
 }
 @keyframes mcPulse {
   0% { transform: rotate(-14deg) scale(1); }
@@ -132,39 +137,31 @@ input.nick-input {
   position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
   background: #11111a; border: 3px solid var(--gold); border-radius: 16px;
   box-shadow: 0 0 25px rgba(255,183,3,0.7), 4px 4px 0 #000;
-  padding: 14px 22px; display: flex; align-items: center; gap: 14px;
+  padding: 12px 20px; display: flex; align-items: center; gap: 14px;
   z-index: 100000; transition: top 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
   font-family: 'Press Start 2P', monospace; pointer-events: none;
 }
 #achieve-pop.show { top: 20px; }
-#achieve-pop .t1 { font-size: 9px; color: var(--gold); margin-bottom: 5px; }
-#achieve-pop .t2 { font-size: 11px; color: #fff; }
+#achieve-pop .t1 { font-size: 8px; color: var(--gold); margin-bottom: 5px; }
+#achieve-pop .t2 { font-size: 10px; color: #fff; }
 
 main {
-  max-width: 900px; margin: 0 auto; padding: 30px 16px 80px;
-  display: flex; flex-direction: column; align-items: center; gap: 28px;
+  max-width: 900px; margin: 0 auto; padding: 24px 16px 80px;
+  display: flex; flex-direction: column; align-items: center; gap: 26px;
 }
 
 .profile-card {
   width: 100%; max-width: 640px;
   background: rgba(20, 20, 32, 0.94); border: 4px solid #fff; border-radius: 26px;
-  box-shadow: 8px 8px 0px var(--red); padding: 26px 20px; text-align: center;
-  position: relative;
+  box-shadow: 8px 8px 0px var(--theme-glow); padding: 24px 18px; text-align: center;
 }
 
 .hero-banner {
-  width: 100%;
-  border-radius: 16px; border: 3px solid #fff;
+  width: 100%; border-radius: 16px; border: 3px solid #fff;
   overflow: hidden; margin-bottom: 16px; cursor: pointer; position: relative;
-  background: #000;
-  display: flex; align-items: center; justify-content: center;
+  background: #000; display: flex; align-items: center; justify-content: center;
 }
-.hero-banner img {
-  width: 100%;
-  max-height: 380px;
-  object-fit: contain;
-  display: block;
-}
+.hero-banner img { width: 100%; max-height: 380px; object-fit: contain; display: block; }
 .hero-banner::after {
   content: 'ТАПНИ 5 РАЗ ДЛЯ ЧИТ-КОДА ✨'; position: absolute; bottom: 8px; right: 8px;
   font-size: 8px; font-family: 'Press Start 2P'; background: rgba(0,0,0,0.8);
@@ -172,88 +169,68 @@ main {
 }
 
 .profile-card h1 {
-  font-family: 'Press Start 2P', monospace; font-size: clamp(17px, 4.5vw, 23px);
-  color: #fff; margin-bottom: 8px; text-shadow: 3px 3px 0px var(--red);
+  font-family: 'Press Start 2P', monospace; font-size: clamp(16px, 4.4vw, 22px);
+  color: #fff; margin-bottom: 8px; text-shadow: 3px 3px 0px var(--theme-glow);
 }
 .profile-sub { font-size: 13px; color: #ccc; margin-bottom: 16px; font-weight: 700; line-height: 1.4; }
 
-.papa-link {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  background: linear-gradient(135deg, #229ED9, #0088cc);
-  color: #fff; font-family: 'Press Start 2P', monospace; font-size: 11px;
-  padding: 12px 18px; border-radius: 12px; border: 3px solid #fff;
-  box-shadow: 4px 4px 0px #000; text-decoration: none; margin-bottom: 22px;
-  transition: transform 0.1s, box-shadow 0.1s;
+.action-row {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px;
 }
-.papa-link:hover { transform: scale(1.03); box-shadow: 6px 6px 0px #000; }
 
 .stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px; margin-bottom: 18px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;
 }
-@media (max-width: 560px) {
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-}
+@media (max-width: 560px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
 
 .stat-box {
   background: #101018; border: 2px solid rgba(255,255,255,0.2);
   border-radius: 12px; padding: 12px 6px;
 }
-.stat-name { font-size: 9px; color: #888; margin-bottom: 6px; font-family: 'Press Start 2P', monospace; }
-.stat-val { font-size: 16px; font-weight: 900; color: #fff; }
+.stat-name { font-size: 8px; color: #888; margin-bottom: 6px; font-family: 'Press Start 2P', monospace; }
+.stat-val { font-size: 15px; font-weight: 900; color: #fff; }
 
 .stat-box.hunger {
-  background: radial-gradient(circle, rgba(255,23,68,0.3) 0%, rgba(20,10,15,0.95) 100%);
-  border: 3px solid var(--red);
-  margin-bottom: 24px;
-  padding: 16px 10px;
-  animation: pulseHunger 1.1s ease-in-out infinite alternate;
-}
-@keyframes pulseHunger {
-  0% { transform: scale(1); box-shadow: 0 0 15px rgba(255,23,68,0.4); }
-  100% { transform: scale(1.02); box-shadow: 0 0 35px rgba(255,23,68,0.9); border-color: var(--yellow); }
+  background: radial-gradient(circle, rgba(255,23,68,0.35) 0%, rgba(20,10,15,0.95) 100%);
+  border: 3px solid var(--red); margin-bottom: 20px; padding: 14px 10px;
 }
 .stat-box.hunger .stat-val {
-  font-size: clamp(24px, 6vw, 32px); color: var(--yellow);
+  font-size: clamp(22px, 6vw, 30px); color: var(--yellow);
   text-shadow: 0 0 15px #ff1744, 2px 2px 0px #000;
 }
-.flame-tag {
-  display: inline-block; font-size: 9px; font-family: 'Press Start 2P', monospace;
-  background: var(--red); color: #fff; padding: 4px 8px; border-radius: 6px; margin-top: 6px;
-}
 
-/* ================= ИЗОЛИРОВАННЫЙ ЭКРАН ИГРЫ (FULLSCREEN APP) ================= */
+/* ПОЛНОЭКРАННЫЙ ЭКРАН ИГРЫ */
 #game-section {
   position: fixed; inset: 0;
   width: 100vw; height: 100vh; height: 100dvh;
-  z-index: 99998; background: rgba(5,5,10,0.96); backdrop-filter: blur(12px);
+  z-index: 99998; background: rgba(5,5,10,0.96); backdrop-filter: blur(14px);
   display: none; flex-direction: column; align-items: center; justify-content: center;
-  touch-action: none; -webkit-touch-callout: none;
-  padding: 10px;
+  touch-action: none; -webkit-touch-callout: none; padding: 10px;
 }
 
 .game-close-btn {
   position: absolute; top: 12px; right: 12px; z-index: 1000;
   background: #141420; border: 2px solid #fff; color: #fff;
-  font-family: 'Press Start 2P', monospace; font-size: 10px;
-  padding: 8px 12px; border-radius: 10px; cursor: pointer;
-  box-shadow: 2px 2px 0 #000;
-  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  font-family: 'Press Start 2P', monospace; font-size: 9px;
+  padding: 8px 12px; border-radius: 10px; cursor: pointer; box-shadow: 2px 2px 0 #000;
+  touch-action: manipulation;
 }
-.game-close-btn:active { transform: scale(0.95); }
 
 #game-wrap {
   position: relative; width: 100%; max-width: 480px; height: 92%; max-height: 700px;
   background: rgba(16, 16, 26, 0.98); border: 4px solid #fff; border-radius: 20px;
-  box-shadow: 0 0 35px rgba(0,0,0,0.9), 6px 6px 0px var(--red);
+  box-shadow: 0 0 35px var(--theme-glow), 6px 6px 0px var(--theme-glow);
   overflow: hidden; touch-action: none;
 }
-
-canvas {
-  display: block; width: 100%; height: 100%; image-rendering: pixelated;
-  transition: filter 0.25s, transform 0.25s;
+#game-wrap.event-active {
+  animation: borderAlert 0.6s infinite alternate;
 }
+@keyframes borderAlert {
+  0% { border-color: var(--yellow); box-shadow: 0 0 25px var(--yellow); }
+  100% { border-color: var(--red); box-shadow: 0 0 35px var(--red); }
+}
+
+canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
 canvas.trip {
   filter: blur(3px) hue-rotate(85deg) contrast(1.4) saturate(2);
   transform: scale(1.04) rotate(0.8deg);
@@ -270,8 +247,16 @@ canvas.trip {
 #weight-fill { width: 65%; height: 100%; background: var(--yellow); transition: width 0.15s, background 0.2s; }
 #shield-fill { width: 0%; height: 100%; background: var(--gold); transition: width 0.1s; }
 
+/* БАННЕР СПЕЦ-СОБЫТИЯ */
+#event-banner {
+  position: absolute; top: 60px; left: 0; right: 0; text-align: center;
+  font-family: 'Press Start 2P'; font-size: 10px; color: var(--yellow);
+  background: rgba(0,0,0,0.85); padding: 8px 0; border-top: 2px solid var(--red);
+  border-bottom: 2px solid var(--red); z-index: 12; display: none;
+}
+
 .overlay {
-  position: absolute; inset: 0; background: rgba(5,5,8,0.93);
+  position: absolute; inset: 0; background: rgba(5,5,8,0.94);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   z-index: 20; text-align: center; padding: 20px;
 }
@@ -279,44 +264,49 @@ canvas.trip {
   font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--red);
   margin-bottom: 12px; line-height: 1.6; text-shadow: 2px 2px #fff;
 }
-.overlay p { font-size: 10px; line-height: 1.8; margin-bottom: 16px; color: #ccc; font-family: 'Press Start 2P', monospace; }
+.overlay p { font-size: 10px; line-height: 1.8; margin-bottom: 14px; color: #ccc; font-family: 'Press Start 2P', monospace; }
 
-/* ТАЧ-КНОПКИ: БОЛЬШИЕ, БЕЗ ВЫДЕЛЕНИЙ И МЕНЮ */
+/* УПРАВЛЕНИЕ: КНОПКИ ДВИЖЕНИЯ И БАТИН РЫК */
 .touch-ctl {
   position: absolute; bottom: 12px; left: 12px; right: 12px;
-  display: flex; justify-content: space-between; z-index: 15; pointer-events: none;
+  display: flex; justify-content: space-between; align-items: flex-end; z-index: 15; pointer-events: none;
 }
 .t-btn {
-  width: 90px; height: 70px;
-  background: rgba(255,255,255,0.22); border: 3px solid #fff;
+  width: 85px; height: 68px; background: rgba(255,255,255,0.22); border: 3px solid #fff;
   color: #fff; font-family: 'Press Start 2P', monospace; font-size: 22px; border-radius: 16px;
-  pointer-events: auto; box-shadow: 4px 4px 0px #000;
-  touch-action: none; -webkit-tap-highlight-color: transparent;
+  pointer-events: auto; box-shadow: 4px 4px 0px #000; touch-action: none;
   display: flex; align-items: center; justify-content: center;
 }
-.t-btn.active, .t-btn:active {
-  background: rgba(255,23,68,0.7); transform: translateY(3px); box-shadow: 1px 1px 0px #000;
-}
+.t-btn.active, .t-btn:active { background: rgba(255,23,68,0.7); transform: translateY(3px); }
 
-.dev-card {
-  width: 100%; max-width: 640px;
-  background: linear-gradient(135deg, rgba(20, 20, 32, 0.96), rgba(30, 20, 35, 0.96));
-  border: 4px solid var(--yellow); border-radius: 22px;
-  box-shadow: 8px 8px 0px #000; padding: 24px 20px; text-align: center;
+/* КНОПКА СУПЕРСПОСОБНОСТИ */
+.roar-btn {
+  width: 70px; height: 70px; border-radius: 50%;
+  background: #ffb703; border: 3px solid #fff; color: #000;
+  font-family: 'Press Start 2P'; font-size: 8px; text-align: center;
+  pointer-events: auto; box-shadow: 0 0 15px rgba(255,183,3,0.7), 3px 3px 0 #000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  cursor: pointer; touch-action: none; margin-bottom: 4px;
 }
-.dev-card h3 {
-  font-family: 'Press Start 2P', monospace; font-size: 13px; color: var(--yellow); margin-bottom: 12px;
-}
-.dev-card p {
-  font-size: 13px; line-height: 1.6; color: #eee; margin-bottom: 16px;
-}
+.roar-btn:disabled { opacity: 0.45; filter: grayscale(1); box-shadow: none; }
+.roar-btn:active:not(:disabled) { transform: scale(0.92); }
 
-.leaderboard-card, .achievements-card {
+/* КАРТОЧКА ПРАВИЛ */
+.laws-content {
+  text-align: left; font-size: 11px; line-height: 1.8; color: #eee;
+  max-height: 60vh; overflow-y: auto; padding-right: 8px;
+}
+.laws-content h3 { font-family: 'Press Start 2P'; font-size: 10px; color: var(--gold); margin: 14px 0 6px; }
+.laws-content ul { list-style: none; padding-left: 0; }
+.laws-content li { margin-bottom: 6px; }
+
+.leaderboard-card, .achievements-card, .dev-card {
   width: 100%; max-width: 640px; background: rgba(20, 20, 32, 0.94);
   border: 4px solid var(--gold); border-radius: 22px; box-shadow: 8px 8px 0px #000;
   padding: 24px; text-align: center;
 }
 .achievements-card { border-color: #fff; box-shadow: 8px 8px 0px var(--red); }
+.dev-card { border-color: var(--yellow); }
 .lead-list { list-style: none; display: flex; flex-direction: column; gap: 8px; font-family: 'Press Start 2P', monospace; font-size: 10px; }
 .lead-item {
   display: flex; justify-content: space-between; align-items: center;
@@ -340,7 +330,7 @@ canvas.trip {
 <audio id="bg-music"></audio>
 
 <div id="achieve-pop">
-  <div style="font-size:26px">🏆</div>
+  <div style="font-size:24px">🏆</div>
   <div>
     <div class="t1">ДОСТИЖЕНИЕ РАЗБЛОКИРОВАНО!</div>
     <div class="t2" id="ach-title">...</div>
@@ -372,7 +362,48 @@ canvas.trip {
   </div>
 </div>
 
-<!-- ДИСКЛЕЙМЕР И ПРАВИЛА -->
+<!-- МОДАЛКА: ЗАКОНЫ ПАПКИ (ПРАВИЛА И МЕХАНИКИ) -->
+<div class="modal-overlay" id="laws-modal" style="display:none">
+  <div class="gate-box" style="max-width:560px">
+    <h2>📜 СВЯЩЕННЫЕ ЗАКОНЫ ПАПКИ</h2>
+    <div class="laws-content">
+      <p>Сфинкс — хранитель веса, вкуса и общажного спокойствия. Чтобы выжить и попасть в топ, соблюдай заветы:</p>
+      
+      <h3>🍗 1. ФАСТФУД (КАЛОРИИ И НАБОР)</h3>
+      <ul>
+        <li>🍗 <b>Крыло:</b> +15 PTS, +2 кг, +10 калорий в щит.</li>
+        <li>🍟 <b>Фри / 🍕 Пицца / 🍔 Бургер:</b> плотная масса для набора авторитета.</li>
+        <li>🪣 <b>Баскет KFC:</b> +45 PTS, сразу +5 кг! Лови с умом, перевес близок.</li>
+      </ul>
+
+      <h3>🥦 2. ЗОЖ (СБРОС ВЕСА)</h3>
+      <ul>
+        <li>🥬 <b>Салат / 🥦 Брокколи / 🥒 Огурец / 💧 Вода:</b> сбрасывают вес от -1.5 до -2.5 кг.</li>
+        <li>🏋️ <b>Гантель:</b> мощнейшая сушка (-4.5 кг). Не дай весу упасть до 0 кг!</li>
+      </ul>
+
+      <h3>⚡ 3. БАЛАНС ЖИЗНИ И СМЕРТИ</h3>
+      <ul>
+        <li>⚖️ <b>Критический вес:</b> держи вес в пределах от <b>1 до 199 кг</b>. Если вес станет 0 или 200 — игра сразу окончена!</li>
+        <li>🛡️ <b>Золотой щит:</b> заполни шкалу калорий до 100%, чтобы включить защитное поле от бомб на 5 секунд.</li>
+      </ul>
+
+      <h3>🚬 4. ОСОБЫЕ РЕЛИКВИИ</h3>
+      <ul>
+        <li>🚬 <b>Marlboro / Philip Morris:</b> тактический перекур. Включает эффект Slow-Mo (замедление времени).</li>
+        <li>🍹 <b>Пунш:</b> режим берсерка! Моментально возвращает идеальный вес 130 кг и позволяет пожирать бомбы.</li>
+        <li>💖 <b>Первокурсница:</b> +20 PTS, вызывает приступ романтического головокружения (трип-эффект).</li>
+        <li>💣 <b>Бомба:</b> мгновенный разнос, если нет активного щита или ярости.</li>
+      </ul>
+
+      <h3>🦁 5. СУПЕРСПОСОБНОСТЬ: «БАТИН РЫК»</h3>
+      <p>Кнопка <b>🦁 РЫК</b> взрывает все летящие бомбы ударной волной. Кулдаун — 20 секунд. Используй в безвыходных ситуациях!</p>
+    </div>
+    <button class="btn gold" id="btn-close-laws" style="width:100%; margin-top:16px">УСВОИЛ, ПАПКА! 🤝</button>
+  </div>
+</div>
+
+<!-- ДИСКЛЕЙМЕР ПЕРЕД СТАРТОМ -->
 <div class="modal-overlay" id="rules-modal" style="display:none">
   <div class="gate-box">
     <h2>⚠️ ВАЖНОЕ ОБРАЩЕНИЕ</h2>
@@ -389,7 +420,7 @@ canvas.trip {
 <main>
   <div class="profile-card">
     <div>
-      <span class="beta-badge">🔥 БЕТА-ТЕСТ v1.0 🔥</span>
+      <span class="beta-badge">🔥 БЕТА-ТЕСТ v1.2 🔥</span>
     </div>
 
     <div class="mc-splash-wrap">
@@ -403,9 +434,16 @@ canvas.trip {
     <h1>ДАНИЛА «СФИНКС»</h1>
     <div class="profile-sub">Мудрый батя · Добряк · Сила и душа движения</div>
 
-    <a href="https://t.me/pokladishhh" target="_blank" class="papa-link">
-      📢 ТГК СФИНКСА — ПАПА! 👑
-    </a>
+    <!-- ВЫБОР НЕОНОВОЙ ПОДСВЕТКИ (9 ЦВЕТОВ) -->
+    <div class="theme-picker-wrap">
+      <div class="theme-title">🎨 НЕОНОВАЯ АТМОСФЕРА СФИНКСА (9 ЦВЕТОВ):</div>
+      <div class="theme-dots" id="theme-dots"></div>
+    </div>
+
+    <div class="action-row">
+      <a href="https://t.me/pokladishhh" target="_blank" class="btn tg">📢 ТГК ПАПЫ</a>
+      <button class="btn gold" id="btn-show-laws">📜 ЗАКОНЫ ПАПКИ</button>
+    </div>
 
     <div class="stats-grid">
       <div class="stat-box"><div class="stat-name">ВОЗРАСТ</div><div class="stat-val">21</div></div>
@@ -417,7 +455,7 @@ canvas.trip {
     <div class="stat-box hunger">
       <div class="stat-name">🔥 УРОВЕНЬ ГОЛОДА 🔥</div>
       <div class="stat-val">1000/100</div>
-      <span class="flame-tag">НЕОТВРАТИМАЯ ТЯГА К КРЫЛЬЯМ</span>
+      <div style="font-size:9px;font-family:'Press Start 2P';margin-top:6px;color:#fff">НЕОТВРАТИМАЯ ТЯГА К КРЫЛЬЯМ</div>
     </div>
 
     <button class="btn" style="width:100%; font-size:12px; padding:16px;" id="btn-show-rules">
@@ -426,9 +464,9 @@ canvas.trip {
   </div>
 
   <div class="dev-card">
-    <h3>🛠️ РАЗРАБОТКА И ПОДДЕРЖКА</h3>
-    <p>
-      Если хотите поддержать разработку новых игр про СГУ, предложить мем или связаться с создателем:
+    <h3 style="font-family:'Press Start 2P';font-size:12px;color:var(--yellow);margin-bottom:12px;">🛠️ РАЗРАБОТКА И ПОДДЕРЖКА</h3>
+    <p style="font-size:13px;line-height:1.6;margin-bottom:16px;">
+      Предложить мем, трек или идею для новых игр:
     </p>
     <a href="https://t.me/billychur" target="_blank" class="btn tg">
       💬 НАПИСАТЬ РАЗРАБОТЧИКУ (@billychur)
@@ -437,14 +475,14 @@ canvas.trip {
 
   <!-- ОНЛАЙН ТАБЛИЦА ЛИДЕРОВ -->
   <div class="leaderboard-card">
-    <h2 style="font-family:'Press Start 2P';font-size:14px;color:var(--gold);margin-bottom:16px;">🏆 ДОСКА ПОЧЁТА ПАПКИ (ОНЛАЙН)</h2>
+    <h2 style="font-family:'Press Start 2P';font-size:13px;color:var(--gold);margin-bottom:16px;">🏆 ДОСКА ПОЧЁТА ПАПКИ (ОНЛАЙН)</h2>
     <ul class="lead-list" id="lead-container">
       <li class="lead-item"><span>Загрузка рекордов...</span></li>
     </ul>
   </div>
 
   <div class="achievements-card">
-    <h2 style="font-family:'Press Start 2P';font-size:14px;color:var(--yellow);margin-bottom:16px;">🎖️ ДОСТИЖЕНИЯ (15)</h2>
+    <h2 style="font-family:'Press Start 2P';font-size:13px;color:var(--yellow);margin-bottom:16px;">🎖️ ДОСТИЖЕНИЯ (15)</h2>
     <div class="ach-grid" id="ach-container"></div>
   </div>
 </main>
@@ -454,10 +492,13 @@ canvas.trip {
   <button class="game-close-btn" id="btn-close-game">✕ ВЫХОД</button>
 
   <div id="game-wrap">
+    <div id="event-banner">🔥 СПЕЦ-СОБЫТИЕ: НАЛЕТ НА KFC! 🔥</div>
+
     <div class="hud">
       <div>
         СЧЁТ: <span id="score-val" style="color:var(--yellow)">0</span><br>
-        <span style="font-size:7px; color:#aaa;" id="speed-indicator">СКОРОСТЬ: 1.0x</span>
+        <span style="font-size:7px; color:#aaa;" id="speed-indicator">СКОРОСТЬ: 1.0x</span><br>
+        <span style="font-size:8px; color:var(--gold);" id="combo-indicator">COMBO: x1</span>
       </div>
       <div class="bars-wrap">
         <div>ВЕС:<div class="bar-container"><div id="weight-fill"></div></div></div>
@@ -469,15 +510,24 @@ canvas.trip {
 
     <div class="touch-ctl">
       <button class="t-btn" id="b-left">◀</button>
+      <button class="roar-btn" id="b-roar">
+        <span style="font-size:20px">🦁</span>
+        <span id="roar-txt">РЫК</span>
+      </button>
       <button class="t-btn" id="b-right">▶</button>
     </div>
 
     <div class="overlay" id="over-screen" style="display:none">
       <h2 id="over-title">КОНЕЦ!</h2>
       <p id="over-desc">...</p>
-      <p>СЧЁТ: <span id="final-score" style="color:var(--yellow)">0</span></p>
-      <button class="btn" id="restart-btn" style="margin-bottom:10px">ЕЩЁ РАЗ 🔄</button>
-      <a href="https://t.me/pokladishhh" target="_blank" class="btn gold" style="margin-bottom:8px">🍗 ПОРАДОВАТЬ ДАНИЛУ БАСКЕТОМ В ТГК</a>
+      <p>ИТОГОВЫЙ СЧЁТ: <span id="final-score" style="color:var(--yellow);font-size:16px">0</span></p>
+      
+      <button class="btn green" id="btn-get-diploma" style="margin-bottom:10px; width:100%">
+        📜 ЗАБРАТЬ ДИПЛОМ СФИНКСА
+      </button>
+      
+      <button class="btn" id="restart-btn" style="margin-bottom:10px; width:100%">ЕЩЁ РАЗ 🔄</button>
+      <a href="https://t.me/pokladishhh" target="_blank" class="btn gold" style="width:100%">🍗 БАСКЕТ В ТГК ПАПЫ</a>
     </div>
   </div>
 </div>
@@ -506,32 +556,53 @@ function playRandomBgMusic() {
 }
 bgAudio.onended = playRandomBgMusic;
 
-/* ================= 2. MINECRAFT СПЛЕШИ ================= */
-const SPLASH_TEXTS = [
-  "Ни одно крыло не пострадало!",
-  "Первокурсницы живы!",
-  "Папка лучший!",
-  "Хочешь карьерный ростик?",
-  "Пахан медиа",
-  "Повелитель мака",
-  "Любитель кфс",
-  "Владелец холестерина",
-  "Отец отцов",
-  "Истребитель девственниц",
-  "14",
-  "Сфинкс",
-  "88"
+/* ================= 2. ВЫБОР НЕОНОВОЙ ПОДСВЕТКИ (9 ЦВЕТОВ) ================= */
+const THEME_COLORS = [
+  { name: 'KFC Red', val: '#ff1744' },
+  { name: 'Gold Sphinx', val: '#ffb703' },
+  { name: 'Cyber Purple', val: '#d500f9' },
+  { name: 'Freshman Pink', val: '#ff4081' },
+  { name: 'Saratov Blue', val: '#00e5ff' },
+  { name: 'Hostel Green', val: '#00e676' },
+  { name: 'Toxic Lime', val: '#aeea00' },
+  { name: 'Smoke White', val: '#e0e0e0' },
+  { name: 'Deep Indigo', val: '#3d5afe' }
 ];
 
+let currentTheme = localStorage.getItem('sph_theme') || '#ff1744';
+function applyTheme(color) {
+  currentTheme = color;
+  localStorage.setItem('sph_theme', color);
+  document.documentElement.style.setProperty('--theme-glow', color);
+  renderThemeDots();
+}
+
+function renderThemeDots() {
+  const cont = document.getElementById('theme-dots');
+  cont.innerHTML = THEME_COLORS.map(c => `
+    <div class="t-dot ${c.val === currentTheme ? 'active' : ''}" 
+         style="background:${c.val}" 
+         onclick="applyTheme('${c.val}')"
+         title="${c.name}"></div>
+  `).join('');
+}
+applyTheme(currentTheme);
+
+/* ================= 3. MINECRAFT СПЛЕШИ ================= */
+const SPLASH_TEXTS = [
+  "Ни одно крыло не пострадало!", "Первокурсницы живы!", "Папка лучший!",
+  "Хочешь карьерный ростик?", "Пахан медиа", "Повелитель мака",
+  "Любитель кфс", "Владелец холестерина", "Отец отцов",
+  "Истребитель девственниц", "14", "Сфинкс", "88"
+];
 const splashEl = document.getElementById('mc-splash');
 function setRandomSplash() {
-  const chosen = SPLASH_TEXTS[Math.floor(Math.random() * SPLASH_TEXTS.length)];
-  splashEl.textContent = chosen;
+  splashEl.textContent = SPLASH_TEXTS[Math.floor(Math.random() * SPLASH_TEXTS.length)];
 }
 setRandomSplash();
 splashEl.onclick = setRandomSplash;
 
-/* ================= 3. ЗВУКИ (WEB AUDIO) ================= */
+/* ================= 4. ЗВУКИ (WEB AUDIO) ================= */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playTone(freq, type, duration, vol=0.1) {
   try {
@@ -550,12 +621,15 @@ const SFX = {
   bomb() { playTone(90, 'sawtooth', 0.45, 0.35); playTone(45, 'square', 0.6, 0.4); },
   shield() { [260, 330, 390, 520, 660].forEach((f, i) => setTimeout(() => playTone(f, 'sine', 0.12, 0.15), i * 40)); },
   fanfare() { [440, 554, 659, 880].forEach((f, i) => setTimeout(() => playTone(f, 'triangle', 0.22, 0.2), i * 70)); },
-  heartbeat() { playTone(55, 'sine', 0.14, 0.4); setTimeout(() => playTone(48, 'sine', 0.16, 0.35), 110); }
+  heartbeat() { playTone(55, 'sine', 0.14, 0.4); setTimeout(() => playTone(48, 'sine', 0.16, 0.35), 110); },
+  roar() { [120, 95, 70, 50].forEach((f, i) => setTimeout(() => playTone(f, 'sawtooth', 0.35, 0.4), i * 60)); },
+  combo() { playTone(600, 'square', 0.1, 0.15); setTimeout(() => playTone(850, 'square', 0.12, 0.2), 50); }
 };
 
-/* ================= 4. ФЕЙСКОНТРОЛЬ И ДИСКЛЕЙМЕР ================= */
+/* ================= 5. МОДАЛКИ И ФЕЙСКОНТРОЛЬ ================= */
 const gateModal = document.getElementById('gate-modal');
 const rulesModal = document.getElementById('rules-modal');
+const lawsModal = document.getElementById('laws-modal');
 const gameSection = document.getElementById('game-section');
 let currentNick = localStorage.getItem('sphynx_nick') || 'Первокурсник';
 
@@ -565,7 +639,6 @@ function closeSite() {
       ДОСТУП ЗАКРЫТ 🚪<br><br>Сфинкс принимает только первокурсниц.
     </div>
   `;
-  try { window.close(); } catch(e) {}
 }
 document.getElementById('g-no-1').onclick = closeSite;
 document.getElementById('g-no-2').onclick = closeSite;
@@ -581,13 +654,15 @@ document.getElementById('g-save-nick').onclick = () => {
   playRandomBgMusic();
 };
 
+document.getElementById('btn-show-laws').onclick = () => { lawsModal.style.display = 'flex'; };
+document.getElementById('btn-close-laws').onclick = () => { lawsModal.style.display = 'none'; };
+
 document.getElementById('btn-show-rules').onclick = () => {
   rulesModal.style.display = 'flex';
   const btn = document.getElementById('btn-love-sphynx');
   btn.disabled = true;
   let count = 5;
   btn.textContent = `Мы все любим сфинкса❤️ (${count})`;
-  
   const timer = setInterval(() => {
     count--;
     if (count > 0) {
@@ -600,7 +675,6 @@ document.getElementById('btn-show-rules').onclick = () => {
   }, 1000);
 };
 
-/* ОТКРЫТИЕ ИГРЫ В ИЗОЛИРОВАННОМ ОКНЕ */
 document.getElementById('btn-love-sphynx').onclick = () => {
   rulesModal.style.display = 'none';
   gameSection.style.display = 'flex';
@@ -609,7 +683,6 @@ document.getElementById('btn-love-sphynx').onclick = () => {
   if (!running && !gameOver) resetGame();
 };
 
-/* ЗАКРЫТИЕ ИГРЫ И ВОЗВРАТ НА САЙТ */
 document.getElementById('btn-close-game').onclick = () => {
   gameSection.style.display = 'none';
   document.body.style.overflow = '';
@@ -624,15 +697,12 @@ document.getElementById('hero-tap').onclick = () => {
   clearTimeout(tapTimer);
   tapTimer = setTimeout(() => tapCount = 0, 1200);
   if (tapCount >= 5) {
-    tapCount = 0;
-    weight = 50;
-    shieldTimer = 600;
-    SFX.fanfare();
-    alert("⚡ СИЛА ПАПКИ АКТИВИРОВАНА: Данила вошёл в идеальную форму! Включено защитное поле!");
+    tapCount = 0; weight = 100; shieldTimer = 600; SFX.fanfare();
+    alert("⚡ СИЛА ПАПКИ АКТИВИРОВАНА: Идеальный вес 100 кг и защитный щит!");
   }
 };
 
-/* ================= 5. АЧИВКИ ================= */
+/* ================= 6. АЧИВКИ ================= */
 const ACHIEVEMENTS = [
   { id: 'first_bite', t: 'Первый кусь' }, { id: 'wings_50', t: 'Фанатик KFC' },
   { id: 'wings_150', t: 'Баскет-Монстр' }, { id: 'fresh_3', t: 'Лучший любовник' },
@@ -671,10 +741,8 @@ function renderAchievements() {
 }
 renderAchievements();
 
-/* ================= 6. ОНЛАЙН-ЛИДЕРБОРД (FIREBASE REALTIME DB) ================= */
-const firebaseConfig = {
-  databaseURL: "https://sphynx-game-default-rtdb.firebaseio.com"
-};
+/* ================= 7. ОНЛАЙН-ЛИДЕРБОРД (FIREBASE REALTIME DB) ================= */
+const firebaseConfig = { databaseURL: "https://sphynx-game-default-rtdb.firebaseio.com" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const leaderboardsRef = db.ref('leaderboard');
@@ -686,11 +754,7 @@ function saveRecord(newScore) {
   userRef.once('value').then(snap => {
     const data = snap.val();
     if (!data || newScore > data.score) {
-      userRef.set({
-        name: currentNick,
-        score: newScore,
-        time: Date.now()
-      });
+      userRef.set({ name: currentNick, score: newScore, time: Date.now() });
     }
   });
 }
@@ -698,12 +762,9 @@ function saveRecord(newScore) {
 leaderboardsRef.on('value', snapshot => {
   const data = snapshot.val();
   const list = [];
-  if (data) {
-    Object.keys(data).forEach(k => list.push(data[k]));
-  }
+  if (data) Object.keys(data).forEach(k => list.push(data[k]));
   list.sort((a, b) => b.score - a.score);
   const topList = list.slice(0, 7);
-
   const container = document.getElementById('lead-container');
   if (topList.length === 0) {
     container.innerHTML = `<li class="lead-item"><span>Пока нет рекордов. Стань первым!</span></li>`;
@@ -717,22 +778,31 @@ leaderboardsRef.on('value', snapshot => {
   `).join('');
 });
 
-/* ================= 7. ДВИЖОК ИГРЫ ================= */
+/* ================= 8. ИГРОВОЙ ДВИЖОК ================= */
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 
 const imgs = { fit: new Image(), mid: new Image(), fat: new Image(), stuck: new Image(), giant: new Image() };
-imgs.fit.src = 'sphynx_fit.png';
-imgs.mid.src = 'sphynx_mid.png';
-imgs.fat.src = 'sphynx_fat.png';
-imgs.stuck.src = 'sphynx_stuck.png';
-imgs.giant.src = 'sphynx_giant.png';
+imgs.fit.src = 'sphynx_fit.png'; imgs.mid.src = 'sphynx_mid.png';
+imgs.fat.src = 'sphynx_fat.png'; imgs.stuck.src = 'sphynx_stuck.png'; imgs.giant.src = 'sphynx_giant.png';
 
 const MAX_WEIGHT = 200;
 let score = 0, weight = 130, shieldCharge = 0, shieldTimer = 0;
 let slowMoTimer = 0, rageTimer = 0, tripTimer = 0;
 let gameOver = false, running = false, gameSeconds = 0, speedMultiplier = 1.0;
 let timerInterval = null, vegeStreak = 0;
+
+// КОМБО-СТРИК
+let comboCount = 0;
+let comboMultiplier = 1;
+
+// БАТИН РЫК (СУПЕРСПОСОБНОСТЬ)
+let roarCooldown = 0;
+const ROAR_MAX_COOLDOWN = 20;
+
+// СПЕЦ-СОБЫТИЯ
+let activeEvent = null;
+let eventTimer = 0;
 
 const FLOOR_Y = 590;
 const player = { w: 104, h: 130, x: 188, y: FLOOR_Y - 130, stuckTicks: 0, stepAnim: 0 };
@@ -754,7 +824,7 @@ const DROP_TYPES = [
   { t:'water', e:'💧', w: 7,  cal: -5,  wt: -1.5, pts: 5 },
   { t:'dumb', e:'🏋️', w: 3,  cal: -15, wt: -4.5, pts: 15 },
 
-  // ДРУГИЕ (10%)
+  // ОСОБЫЕ (10%)
   { t:'marlboro', e:'🚬', label:'Marlboro', w: 2, pts: 30 },
   { t:'philip', e:'🚬', label:'Philip Morris', w: 3, pts: 15 },
   { t:'punch', e:'🍹', w: 2, pts: 50 },
@@ -766,26 +836,13 @@ const keys = { left: false, right: false };
 window.onkeydown = e => { if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true; if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true; };
 window.onkeyup = e => { if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false; if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false; };
 
-/* НАСТРОЙКА СЕНСОРНЫХ КНОПОК БЕЗ ПАРАЗИТНЫХ ЖЕСТОВ */
 function setupButton(btnId, keyProp) {
   const btn = document.getElementById(btnId);
-  const start = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    keys[keyProp] = true;
-    btn.classList.add('active');
-  };
-  const end = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    keys[keyProp] = false;
-    btn.classList.remove('active');
-  };
-
+  const start = (e) => { e.preventDefault(); e.stopPropagation(); keys[keyProp] = true; btn.classList.add('active'); };
+  const end = (e) => { e.preventDefault(); e.stopPropagation(); keys[keyProp] = false; btn.classList.remove('active'); };
   btn.addEventListener('touchstart', start, { passive: false });
   btn.addEventListener('touchend', end, { passive: false });
   btn.addEventListener('touchcancel', end, { passive: false });
-
   btn.addEventListener('mousedown', start);
   btn.addEventListener('mouseup', end);
   btn.addEventListener('mouseleave', end);
@@ -793,12 +850,38 @@ function setupButton(btnId, keyProp) {
 setupButton('b-left', 'left');
 setupButton('b-right', 'right');
 
-// Запрет свайпов и масштабирования окна внутри игры
-document.getElementById('game-wrap').addEventListener('touchmove', (e) => {
-  e.preventDefault();
-}, { passive: false });
+// БАТИН РЫК
+const roarBtn = document.getElementById('b-roar');
+const roarTxt = document.getElementById('roar-txt');
+function activateRoar() {
+  if (roarCooldown > 0 || !running || gameOver) return;
+  roarCooldown = ROAR_MAX_COOLDOWN;
+  roarBtn.disabled = true;
+  SFX.roar();
+
+  // Уничтожаем все бомбы на экране с искрами
+  let bombCount = 0;
+  for (let i = drops.length - 1; i >= 0; i--) {
+    if (drops[i].meta.t === 'bomb') {
+      bombCount++;
+      for (let k = 0; k < 12; k++) addSparkle(drops[i].x, drops[i].y, '#ffd23f');
+      drops.splice(i, 1);
+    }
+  }
+  score += bombCount * 25;
+}
+roarBtn.addEventListener('touchstart', (e) => { e.preventDefault(); activateRoar(); }, { passive: false });
+roarBtn.addEventListener('click', activateRoar);
+
+document.getElementById('game-wrap').addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
 
 function pickRandomDrop() {
+  if (activeEvent === 'kfc_raid') {
+    return Math.random() < 0.6 ? DROP_TYPES[0] : DROP_TYPES[4]; // Только крылья и баскеты!
+  }
+  if (activeEvent === 'smoke_hour') {
+    return Math.random() < 0.7 ? DROP_TYPES[10] : DROP_TYPES[12]; // Сигареты и пунш!
+  }
   const totalW = DROP_TYPES.reduce((a,b) => a + b.w, 0);
   let r = Math.random() * totalW;
   for (const d of DROP_TYPES) { if (r < d.w) return d; r -= d.w; }
@@ -853,8 +936,8 @@ function update() {
   if (moving) player.stepAnim += 0.22;
 
   spawnTick++;
-  const baseRate = Math.max(38, Math.floor(85 / speedMultiplier));
-  const effectiveRate = slowMoTimer > 0 ? baseRate * 2.2 : baseRate;
+  const baseRate = Math.max(36, Math.floor(85 / speedMultiplier));
+  const effectiveRate = slowMoTimer > 0 ? baseRate * 2.2 : (activeEvent ? Math.floor(baseRate * 0.6) : baseRate);
   if (spawnTick % effectiveRate === 0) spawnDrop();
 
   const timeDilation = slowMoTimer > 0 ? 0.35 : 1.0;
@@ -869,7 +952,14 @@ function update() {
       drops.splice(i, 1);
       continue;
     }
-    if (d.y > canvas.height + 40) drops.splice(i, 1);
+    // Если еда упала мимо — сброс комбо!
+    if (d.y > canvas.height + 40) {
+      if (d.meta.t !== 'bomb') {
+        comboCount = 0; comboMultiplier = 1;
+        document.getElementById('combo-indicator').textContent = 'COMBO: x1';
+      }
+      drops.splice(i, 1);
+    }
   }
 
   for (let i = particles.length - 1; i >= 0; i--) {
@@ -896,7 +986,15 @@ function update() {
 }
 
 function handleCatch(meta) {
-  score += meta.pts;
+  // Комбо растет за каждую пойманную еду/реликвию
+  comboCount++;
+  if (comboCount % 5 === 0 && comboMultiplier < 5) {
+    comboMultiplier++;
+    SFX.combo();
+  }
+  document.getElementById('combo-indicator').textContent = `COMBO: x${comboMultiplier}`;
+
+  score += meta.pts * comboMultiplier;
   if (score >= 500) triggerAchievement('survive_500');
   if (score >= 1000) triggerAchievement('top_player');
 
@@ -952,15 +1050,12 @@ function handleCatch(meta) {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#171724'; ctx.fillRect(0, FLOOR_Y, canvas.width, canvas.height - FLOOR_Y);
-  ctx.fillStyle = '#ff1744'; ctx.fillRect(0, FLOOR_Y, canvas.width, 3);
+  ctx.fillStyle = currentTheme; ctx.fillRect(0, FLOOR_Y, canvas.width, 3);
 
   drops.forEach(d => {
     ctx.font = '28px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(d.meta.e, d.x, d.y);
-    
     if (d.meta.t === 'punch') {
-      ctx.font = '8px "Press Start 2P"';
-      ctx.fillStyle = '#ffd23f';
-      ctx.fillText('ПУНШ', d.x, d.y + 15);
+      ctx.font = '8px "Press Start 2P"'; ctx.fillStyle = '#ffd23f'; ctx.fillText('ПУНШ', d.x, d.y + 15);
     } else if (d.meta.label) {
       ctx.font = '7px "Press Start 2P"';
       ctx.fillStyle = d.meta.t === 'freshman' ? '#ff4081' : '#ffd23f';
@@ -1001,6 +1096,8 @@ function draw() {
 function endGame(title, desc) {
   gameOver = true; running = false;
   clearInterval(timerInterval); canvas.classList.remove('trip');
+  document.getElementById('game-wrap').classList.remove('event-active');
+  document.getElementById('event-banner').style.display = 'none';
   saveRecord(score);
   document.getElementById('over-title').textContent = title;
   document.getElementById('over-desc').textContent = desc;
@@ -1011,16 +1108,51 @@ function endGame(title, desc) {
 function resetGame() {
   score = 0; weight = 130; shieldCharge = 0; shieldTimer = 0;
   slowMoTimer = 0; rageTimer = 0; tripTimer = 0; drops.length = 0; particles.length = 0;
+  comboCount = 0; comboMultiplier = 1; roarCooldown = 0; roarBtn.disabled = false;
+  roarTxt.textContent = 'РЫК'; activeEvent = null; eventTimer = 0;
+  document.getElementById('game-wrap').classList.remove('event-active');
+  document.getElementById('event-banner').style.display = 'none';
   player.x = (canvas.width - player.w) / 2; gameSeconds = 0; speedMultiplier = 1.0;
   document.getElementById('speed-indicator').textContent = 'СКОРОСТЬ: 1.0x';
+  document.getElementById('combo-indicator').textContent = 'COMBO: x1';
 
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     if (!running) return;
     gameSeconds++;
+    
+    // Кулдаун рыка
+    if (roarCooldown > 0) {
+      roarCooldown--;
+      roarTxt.textContent = `${roarCooldown}s`;
+      if (roarCooldown === 0) { roarBtn.disabled = false; roarTxt.textContent = 'РЫК'; }
+    }
+
+    // Скорость раз в 60 сек
     if (gameSeconds % 60 === 0) {
       speedMultiplier = +(speedMultiplier * 1.33).toFixed(2);
       document.getElementById('speed-indicator').textContent = `СКОРОСТЬ: ${speedMultiplier}x`;
+    }
+
+    // Спец-события каждые 50 сек
+    if (gameSeconds > 0 && gameSeconds % 50 === 0 && !activeEvent) {
+      const r = Math.random();
+      activeEvent = r > 0.5 ? 'kfc_raid' : 'smoke_hour';
+      eventTimer = 10;
+      const b = document.getElementById('event-banner');
+      b.textContent = activeEvent === 'kfc_raid' ? '🔥 СПЕЦ-СОБЫТИЕ: НАЛЕТ НА KFC! 🔥' : '🚬 СПЕЦ-СОБЫТИЕ: ЧАС ПИК НА ПЕРЕКУРЕ! 🚬';
+      b.style.display = 'block';
+      document.getElementById('game-wrap').classList.add('event-active');
+      SFX.fanfare();
+    }
+
+    if (activeEvent) {
+      eventTimer--;
+      if (eventTimer <= 0) {
+        activeEvent = null;
+        document.getElementById('event-banner').style.display = 'none';
+        document.getElementById('game-wrap').classList.remove('event-active');
+      }
     }
   }, 1000);
 
@@ -1029,6 +1161,93 @@ function resetGame() {
 }
 
 document.getElementById('restart-btn').onclick = resetGame;
+
+/* ================= 9. ГЕНЕРАТОР ОФИЦИАЛЬНОГО ДИПЛОМА СФИНКСА ================= */
+document.getElementById('btn-get-diploma').onclick = () => {
+  const dCanvas = document.createElement('canvas');
+  dCanvas.width = 1080; dCanvas.height = 1080;
+  const dCtx = dCanvas.getContext('2d');
+
+  // Фон и золотая двойная рамка
+  dCtx.fillStyle = '#0f0f18'; dCtx.fillRect(0, 0, 1080, 1080);
+  dCtx.strokeStyle = '#ffb703'; dCtx.lineWidth = 14; dCtx.strokeRect(30, 30, 1020, 1020);
+  dCtx.strokeStyle = '#fff'; dCtx.lineWidth = 4; dCtx.strokeRect(52, 52, 976, 976);
+
+  // Шапка
+  dCtx.textAlign = 'center';
+  dCtx.fillStyle = '#ff1744';
+  dCtx.font = 'bold 36px "Rubik", sans-serif';
+  dCtx.fillText('САРАТОВСКИЙ ГОСУДАРСТВЕННЫЙ ИНСТИТУТ КРЫЛЬЕВ', 540, 130);
+
+  dCtx.fillStyle = '#ffb703';
+  dCtx.font = '900 68px "Rubik", sans-serif';
+  dCtx.fillText('ПОЧЁТНЫЙ ДИПЛОМ', 540, 220);
+
+  dCtx.fillStyle = '#aaa';
+  dCtx.font = '26px "Rubik", sans-serif';
+  dCtx.fillText('НАСТОЯЩИЙ ДОКУМЕНТ ВЫДАН:', 540, 280);
+
+  // Имя студента
+  dCtx.fillStyle = '#fff';
+  dCtx.font = '900 52px "Rubik", sans-serif';
+  dCtx.fillText(currentNick.toUpperCase(), 540, 350);
+
+  // Звание в зависимости от счета
+  let rank = "МЛАДШИЙ СТУДЕНТ НА ДИЕТЕ";
+  if (score >= 1000) rank = "ЛЕГЕНДАРНЫЙ БАСКЕТ-ГЕНЕРАЛ";
+  else if (score >= 500) rank = "ПОЧЁТНЫЙ ХРАНИТЕЛЬ ХОЛЕСТЕРИНА";
+  else if (score >= 250) rank = "МАСТЕР ЖОРА 1-Й СТЕПЕНИ";
+
+  dCtx.fillStyle = '#ffd23f';
+  dCtx.font = 'bold 32px "Rubik", sans-serif';
+  dCtx.fillText(`ЗВАНИЕ: ${rank}`, 540, 420);
+
+  // Статистика
+  dCtx.fillStyle = '#eee';
+  dCtx.font = '30px "Rubik", sans-serif';
+  dCtx.fillText(`РЕЗУЛЬТАТ В БИТВЕ: ${score} ОЧКОВ`, 540, 480);
+  dCtx.fillText(`ВРЕМЯ ВЫЖИВАНИЯ: ${gameSeconds} СЕК.`, 540, 530);
+
+  // Фото Данилы в центре (если доступно)
+  const heroImg = document.querySelector('.hero-banner img');
+  if (heroImg && heroImg.complete) {
+    try {
+      dCtx.save();
+      dCtx.beginPath();
+      dCtx.arc(540, 710, 120, 0, Math.PI * 2);
+      dCtx.closePath();
+      dCtx.clip();
+      dCtx.drawImage(heroImg, 420, 590, 240, 240);
+      dCtx.restore();
+      dCtx.strokeStyle = '#ffb703'; dCtx.lineWidth = 8;
+      dCtx.beginPath(); dCtx.arc(540, 710, 120, 0, Math.PI * 2); dCtx.stroke();
+    } catch(e) {}
+  }
+
+  // Круглая золотая печать
+  dCtx.save();
+  dCtx.translate(840, 880);
+  dCtx.strokeStyle = '#ff1744'; dCtx.lineWidth = 6;
+  dCtx.beginPath(); dCtx.arc(0, 0, 80, 0, Math.PI * 2); dCtx.stroke();
+  dCtx.fillStyle = '#ff1744'; dCtx.font = 'bold 15px "Rubik", sans-serif';
+  dCtx.fillText('ОДОБРЕНО', 0, -12);
+  dCtx.fillText('ПАПКОЙ', 0, 12);
+  dCtx.fillText('★ СФИНКС ★', 0, 34);
+  dCtx.restore();
+
+  // Подвал
+  dCtx.fillStyle = '#777';
+  dCtx.font = '22px "Rubik", sans-serif';
+  const today = new Date().toLocaleDateString('ru-RU');
+  dCtx.fillText(`Дата выдачи: ${today} г. | Верифицировано на pokladish.ru`, 540, 980);
+
+  // Скачивание файла
+  const link = document.createElement('a');
+  link.download = `diplom_sphynx_${currentNick}.png`;
+  link.href = dCanvas.toDataURL('image/png');
+  link.click();
+};
+
 draw();
 </script>
 </body>
